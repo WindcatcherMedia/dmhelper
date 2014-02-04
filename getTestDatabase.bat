@@ -1,0 +1,1 @@
+adb pull /data/data/com.windcatcher.dmhelper/databases/test_test.db C:\Users\Tyler\Desktop

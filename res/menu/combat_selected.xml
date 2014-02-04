@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_combat_menu_harm"
+        android:showAsAction="always"
+        android:title="@string/action_harm">
+    </item>
+    <item
+        android:id="@+id/menu_combat_heal"
+        android:showAsAction="always"
+        android:title="@string/action_heal">
+    </item>
+    <item
+        android:id="@+id/menu_combat_add_effect"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_effect">
+    </item>
+    <item
+        android:id="@+id/menu_combat_remove_effect"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_remove_effect">
+    </item>
+
+</menu>
