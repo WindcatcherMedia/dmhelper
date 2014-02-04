@@ -147,17 +147,7 @@ ActionBar.OnNavigationListener, OnBackStackChangedListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@Override
-	public void onBackPressed() {
-		// check all of my top fragments to see if any are active, if they are, de-activate them
-		if(CombatFragment.getActiveInstance() != null){
-			if(CombatFragment.deactivate()){
-				super.onBackPressed();
-			}
-		}else{
-			super.onBackPressed();
-		}
-	}
+	
 
 
 	// ===========================================================

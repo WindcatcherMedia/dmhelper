@@ -89,15 +89,11 @@ public class EncountersFragment extends CursorListFragment {
 		// grab the rowID
 		long rowID = getSelectedRowID();
 		
-		// create the fragment and transition
-		CombatFragment frag = CombatFragment.newInstance(rowID);
-
-		FragmentTransaction trans = getActivity().getSupportFragmentManager().beginTransaction();
-		trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		trans.replace(R.id.container, frag, null);
-		trans.addToBackStack(null);
-
-		trans.commit();
+		// transition to combat
+		Intent intent = new Intent(getActivity(), PopupFragmentActivity.class);
+		intent.putExtra(PopupFragmentActivity.ARGS_ROW, rowID);
+		intent.putExtra(PopupFragmentActivity.SCREEN_TO_POP, PopupFragmentActivity.SCREEN_COMBAT);
+		getActivity().startActivity(intent);
 	}
 
 	private void editEncounter(){
@@ -109,7 +105,7 @@ public class EncountersFragment extends CursorListFragment {
 
 		// bring up the edit encounter screen
 		Intent intent = new Intent(getActivity(), PopupFragmentActivity.class);
-		intent.putExtra(PopupFragmentActivity.ARGS_EDIT_ENCOUNTER_ROW, rowID);
+		intent.putExtra(PopupFragmentActivity.ARGS_ROW, rowID);
 		intent.putExtra(PopupFragmentActivity.SCREEN_TO_POP, PopupFragmentActivity.SCREEN_EDIT_ENCOUNTER);
 		getActivity().startActivity(intent);
 	}

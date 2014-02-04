@@ -42,10 +42,6 @@ public class CombatFragment extends CursorListFragment {
 	private TurnView mTurnIndicator;
 	private long mEncounterRowID;
 
-	private static CombatFragment activeInstance;
-
-	private boolean mActivated = false;
-
 
 	// ===========================================================
 	// TODO Constants
@@ -65,7 +61,6 @@ public class CombatFragment extends CursorListFragment {
 
 		initMenu(R.menu.combat_selected, R.menu.combat);
 
-		activate();
 		super.onCreate(savedInstanceState);
 	}
 
@@ -216,42 +211,31 @@ public class CombatFragment extends CursorListFragment {
 
 		return frag;
 	}
-
-	protected void activate(){
-		mActivated = true;
-
-		// set the instance
-		activeInstance = this;
-
-		// remove the navigation bar from the main activity
-		GameActivity act = (GameActivity) getActivity();
-		act.disableNavigation();
+	
+	public long getEncounterRowID(){
+		return mEncounterRowID;
 	}
 
 	/**
 	 * 
 	 * @return Will return true if the fragment de-activated fully
 	 */
-	public static boolean deactivate(){
-
+	public void onBack(){
 		// create an alert dialog to see if the user wants to reset the encounter or save it's state
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActiveInstance().getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.dialog_reset_combat)
 		.setPositiveButton(R.string.dialog_okay, new OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// reset the encounter
-				EncounterTable.resetEncounter(GameSQLDataSource.getDatabase(getActiveInstance().getActivity()), getActiveInstance().mEncounterRowID);
+				EncounterTable.resetEncounter(GameSQLDataSource.getDatabase(getActivity()), mEncounterRowID);
 
 				// remove the navigation bar from the main activity
-				GameActivity act = (GameActivity) activeInstance.getActivity();
+				GameActivity act = (GameActivity) getActivity();
 				act.enableNavigation();
 
-				// null the instance
-				activeInstance = null;
-
-				act.onBackPressed();
+				act.finish();
 			}
 		})
 		.setNegativeButton(R.string.dialog_no, new OnClickListener() {
@@ -259,21 +243,13 @@ public class CombatFragment extends CursorListFragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// remove the navigation bar from the main activity
-				GameActivity act = (GameActivity) activeInstance.getActivity();
+				GameActivity act = (GameActivity) getActivity();
 				act.enableNavigation();
 
-				// null the instance
-				activeInstance = null;
-
-				act.onBackPressed();
+				act.finish();
 			}
 		});
 		builder.create().show();
-		return false;
-	}
-
-	public static CombatFragment getActiveInstance(){
-		return activeInstance;
 	}
 
 }
