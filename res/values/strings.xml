@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Dungeon Manager</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_harm">Harm</string>
+    <string name="action_heal">Heal</string>
+    <string name="action_effect">Add Effect</string>
+    <string name="action_remove_effect">Remove Effect</string>
+    <string name="action_next_turn">Next</string>
+    <string name="action_previous_turn">Previous</string>
+    <string name="main_load">Load Game</string>
+    <string name="main_new">New Game</string>
+    <string name="dialog_new_gamename">Name this campaign...</string>
+    <string name="dialog_pick_creature">Select your creature...</string>
+    <string name="dialog_load_gamename">Load which campaign...</string>
+    <string name="dialog_create_creature_title">Create Creature...</string><string name="dialog_okay">Okay</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="menu_new_encounter">New</string>
+    <string name="menu_run">Run</string>
+    <string name="menu_delete_encounter">Delete Encounter</string>
+    <string name="encounter_list_num">Encounter #%s</string>
+    <string name="encounter_list_creaturecount">Creatures: %s</string>
+    <string name="menu_edit">Edit</string>
+    <string name="encounter_title">Encounter Name:</string>
+    <string name="encounter_creatures">Creatures</string>
+    <string name="menu_add">Add</string>
+    <string name="menu_remove">Remove</string>
+    <string name="menu_save">Save</string>
+    <string name="menu_copy">Copy</string>
+    <string name="menu_creatures_new">New Creature</string>
+    <string name="menu_new">New</string>
+    <string name="dialog_reset_combat">Reset the encounter?</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="misc_name">Name:</string>
+    <string name="misc_init">Initiative Modifier:</string>
+    <string name="misc_hp">HP:</string>
+    <string name="create_creature_take_image">Set Stats Picture</string>
+    <string name="dialog_picture_choose">Grab picture...</string>
+    <string name="dialog_close">Close</string>
+    <string name="dialog_camera">Camera</string>
+    <string name="dialog_gallery">Gallery</string>
+    <string name="dialog_overwrite">overwrite</string>
+    <string name="create_creature_overwrite_picture_title">Overwrite?</string>
+    <string name="create_creature_overwrite_picture">A picture for this creature exists...\nOverwrite? (cannot be undone)</string>
+    <string name="dialog_hp_init_need_numbers">HP and Initiative need to be numbers</string>
+    <string name="dialog_wrong_input">Wrong Input...</string>
+    <string name="dialog_hp_not_null">HP cannot be empty</string>
+    <string name="dialog_init_not_null">Initiative cannot be empty</string>
+    <string name="dialog_name_not_null">Name field cannot be empty.</string>
+    <string name="dialog_no_image">Save an image of this creatures stats?</string>
+    <string name="dialog_no_image_title">No Picture Selected</string>
+    <string name="dialog_quit_or_back">Close app or go to main menu?</string>
+    <string name="dialog_main_menu">Main Menu</string>
+    <string name="dialog_quit_title">Quit?</string>
+    <string name="dialog_close_app">Close App</string>
+    
+
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_encounters_run"
+        android:showAsAction="always"
+        android:title="@string/menu_run">
+    </item>
+    <item
+        android:id="@+id/menu_encounters_edit"
+        android:showAsAction="always"
+        android:title="@string/menu_edit">
+    </item>
+    <item
+        android:id="@+id/menu_encounters_delete"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_delete_encounter">
+    </item>
+
+</menu>
