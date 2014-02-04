@@ -19,13 +19,13 @@ Pull requests are more than welcome.
 
 Here's a laundry list of feature hopefulls and their completion. (This will evolve over time, I'm sure)
 
-Storing:
-~~Players~~
-~~Encounters~~
-~~Creatures~~
+Storing:<br>
+~~Players~~<br>
+~~Encounters~~<br>
+~~Creatures~~<br>
 
-Combat View (~~auto-rolling initative, tracking HP~~/effects, ~~progressing turn through the initative order~~, notifying of effect expiry)
-Campaign notes
+Combat View (~~auto-rolling initative, tracking HP~~/effects, ~~progressing turn through the initative order~~, notifying of effect expiry)<br>
+Campaign notes<br>
 Story arc notes
 
 And more to come as I come up with ideas...
