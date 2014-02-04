@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="game_nav">
-        <item>Encounters</item>
-        <item >Players</item>
-        <item >Creatures</item>
-    </string-array>
-    
-</resources>
