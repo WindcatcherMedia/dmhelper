@@ -14,7 +14,6 @@ import com.windcatcher.dmhelper.GlobalConfig;
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.dialogs.QuickDialogs;
 import com.windcatcher.dmhelper.dialogs.QuickDialogs.IQuitCallback;
-import com.windcatcher.dmhelper.fragments.CombatFragment;
 import com.windcatcher.dmhelper.fragments.CreaturesFragment;
 import com.windcatcher.dmhelper.fragments.EncountersFragment;
 import com.windcatcher.dmhelper.fragments.PlayersFragment;

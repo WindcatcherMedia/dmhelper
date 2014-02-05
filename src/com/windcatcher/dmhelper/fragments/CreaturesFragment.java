@@ -64,6 +64,7 @@ public class CreaturesFragment extends CursorListFragment {
 			newCreature();
 			return true;
 		case R.id.menu_creatures_edit:
+			editCreature();
 			return true;
 		case R.id.menu_creatures_remove:
 			removeCreature();
@@ -88,8 +89,23 @@ public class CreaturesFragment extends CursorListFragment {
 		getActivity().startActivity(intent);
 	}
 
+	private void editCreature(){
+		long rowID = getSelectedRowID();
+		
+		resetSelection();
+		
+		// bring up the create creatures screen with a row argument
+		Intent intent = new Intent(getActivity(), PopupFragmentActivity.class);
+		intent.putExtra(PopupFragmentActivity.SCREEN_TO_POP, PopupFragmentActivity.SCREEN_CREATE_CREATURE);
+		intent.putExtra(PopupFragmentActivity.ARGS_ROW, rowID);
+		getActivity().startActivity(intent);
+	}
+
 	private void removeCreature(){
 		CreaturesTable.deleteCreature(GameSQLDataSource.getDatabase(getActivity()), getSelectedRowID());
+
+		resetSelection();
+
 		refreshList();
 	}
 }

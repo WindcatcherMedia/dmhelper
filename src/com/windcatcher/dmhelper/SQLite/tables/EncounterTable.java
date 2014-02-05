@@ -163,6 +163,10 @@ public class EncounterTable {
 		
 		return hasPlayers;
 	}
+	
+	// ===========================================================
+	// TODO Base SQL Statements
+	// ===========================================================
 
 	public static void update(SQLiteDatabase database, String table, int id, ContentValues values){
 		database.update(table, values, COLUMN_ID + " = " + id, null);

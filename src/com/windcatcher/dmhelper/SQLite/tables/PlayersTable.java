@@ -36,13 +36,13 @@ public class PlayersTable{
 				"(_id integer primary key autoincrement, " +
 				"name text not null, " +
 				"hp INTEGER NOT NULL)");
-		addPlayer(database, "blank", 0);
+		addPlayer(database, "blank");
 	}
 	
-	public static long addPlayer(SQLiteDatabase database, String name, int hp){
+	public static long addPlayer(SQLiteDatabase database, String name){
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_NAME.getName(), name);
-		values.put(COLUMN_HP.getName(), hp);
+		values.put(COLUMN_HP.getName(), 0);
 		long rowID = database.insert(TABLE_NAME, null, values);
 		return rowID;
 	}
@@ -60,6 +60,22 @@ public class PlayersTable{
 		
 		return count;
 	}
+	
+	public static boolean exists(SQLiteDatabase database, String name){
+		Cursor c = query(database);
+		while(c.moveToNext()){
+			if(c.getString(COLUMN_NAME.getNum()).equalsIgnoreCase(name)){	
+				c.close();
+				return true;
+			}
+		}
+		c.close();
+		return false;
+	}
+	
+	// ===========================================================
+	// TODO Base SQL Statements
+	// ===========================================================
 	
 	public static void drop(SQLiteDatabase database){
 		database.execSQL("DROP TABLE " + TABLE_NAME);

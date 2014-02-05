@@ -22,6 +22,7 @@ import com.windcatcher.dmhelper.GlobalConfig;
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
 import com.windcatcher.dmhelper.SQLite.tables.CreaturesTable;
+import com.windcatcher.dmhelper.SQLite.tables.PlayersTable;
 import com.windcatcher.dmhelper.activities.CameraActivity;
 import com.windcatcher.dmhelper.camera.CreatureCameraHost;
 import com.windcatcher.dmhelper.dialogs.QuickDialogs;
@@ -32,7 +33,7 @@ import com.windcatcher.dmhelper.dialogs.QuickDialogs.IPictureOverwriteCallback;
 
 public class CreateCreatureFragment extends Fragment implements IPictureChoiceCallback, IPictureOverwriteCallback{
 
-	public CreateCreatureFragment(){}
+	private CreateCreatureFragment(){}
 
 	// ===========================================================
 	// TODO Fields
@@ -53,6 +54,7 @@ public class CreateCreatureFragment extends Fragment implements IPictureChoiceCa
 	// ===========================================================
 
 	public static final int GET_PICTURE_CODE = 1928;
+	public static final String EXISTING_ROW_ID = "existing";
 
 	// ===========================================================
 	// TODO Inherited Methods
@@ -76,7 +78,7 @@ public class CreateCreatureFragment extends Fragment implements IPictureChoiceCa
 		View v = inflater.inflate(R.layout.fragment_create_creature, null); 
 
 		// grab the edit text references
-		mName = (EditText)v.findViewById(R.id.create_creature_name);
+		mName = (EditText)v.findViewById(R.id.create_player_name);
 		mHP = (EditText)v.findViewById(R.id.create_creature_hp);
 		mInit = (EditText)v.findViewById(R.id.create_creature_init);
 
@@ -92,6 +94,18 @@ public class CreateCreatureFragment extends Fragment implements IPictureChoiceCa
 			}
 		});
 
+		// check for existing row argument which signifies that this is modifying an existing creature
+		int existingRow = getArguments().getInt(EXISTING_ROW_ID);
+		if(existingRow != -1){
+			// row exists, grab the information and populate the fields
+			Cursor c = CreaturesTable.query(GameSQLDataSource.getDatabase(getActivity()), existingRow);
+			if(c.moveToFirst()){
+				mName.setText(c.getString(CreaturesTable.COLUMN_NAME.getNum()));
+				mHP.setText(c.getInt(CreaturesTable.COLUMN_HP.getNum()));
+				mInit.setText(c.getInt(CreaturesTable.COLUMN_INIT_MOD.getNum()));
+				mImagePath = c.getString(CreaturesTable.COLUMN_IMAGE.getNum());
+			}
+		}
 
 
 		return v;
@@ -134,7 +148,7 @@ public class CreateCreatureFragment extends Fragment implements IPictureChoiceCa
 			// now return because the callback will bring up the next dialog if necessary
 			return;
 		}
-		
+
 		Intent i = new Intent(new Intent(getActivity(), CameraActivity.class));
 		i.putExtra(CameraActivity.ARGS_NAME, mName.getText().toString());
 		startActivityForResult(i, GET_PICTURE_CODE);
@@ -159,7 +173,7 @@ public class CreateCreatureFragment extends Fragment implements IPictureChoiceCa
 			Uri selectedImage = data.getData();
 			if(selectedImage != null){
 				path = getPath(selectedImage);
-				
+
 				CreateCreatureFragment.getActiveInstance().setImagePath(path);
 			}
 			//nope, was the camera
@@ -181,8 +195,19 @@ public class CreateCreatureFragment extends Fragment implements IPictureChoiceCa
 	// TODO Methods
 	// ===========================================================
 
+	public static CreateCreatureFragment newInstance(long existingRow){
+		CreateCreatureFragment frag = new CreateCreatureFragment();
+
+		Bundle args = new Bundle();
+		args.putLong(EXISTING_ROW_ID, existingRow);
+
+		frag.setArguments(args);
+
+		return frag;
+	}
+
 	private void saveCreature(){
-		// TODO check for duplicate creature names
+
 
 		// sanity checks
 		final String name = mName.getText().toString();
@@ -208,6 +233,12 @@ public class CreateCreatureFragment extends Fragment implements IPictureChoiceCa
 			init = Integer.valueOf(initS);
 		}catch(NumberFormatException e){
 			QuickDialogs.showFieldWrongInputDialog(getActivity(), FieldNames.HP);
+			return;
+		}
+
+		// check for duplicate creature names
+		if(CreaturesTable.exists(GameSQLDataSource.getDatabase(getActivity()), name)){
+			QuickDialogs.showNameExistsDialog(getActivity());
 			return;
 		}
 
@@ -251,20 +282,20 @@ public class CreateCreatureFragment extends Fragment implements IPictureChoiceCa
 	public static Uri getOutputImageURI(){
 		return outputImageURI;
 	}
-	
+
 	public String getPath(Uri uri) {
-	    String[] projection = {  MediaColumns.DATA};
-	    Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-	    if(cursor != null) {
-	        //HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
-	        //THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
-	        cursor.moveToFirst();
-	        int columnIndex = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
-	        String filePath = cursor.getString(columnIndex);
-	        cursor.close();
-	        return filePath;
-	    }
-	    else 
-	        return uri.getPath();               // FOR OI/ASTRO/Dropbox etc
+		String[] projection = {  MediaColumns.DATA};
+		Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+		if(cursor != null) {
+			//HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+			//THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
+			cursor.moveToFirst();
+			int columnIndex = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+			String filePath = cursor.getString(columnIndex);
+			cursor.close();
+			return filePath;
+		}
+		else 
+			return uri.getPath();               // FOR OI/ASTRO/Dropbox etc
 	}
 }

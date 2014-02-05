@@ -14,6 +14,7 @@ import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
 import com.windcatcher.dmhelper.SQLite.tables.EncounterTable;
 import com.windcatcher.dmhelper.fragments.CombatFragment;
 import com.windcatcher.dmhelper.fragments.CreateCreatureFragment;
+import com.windcatcher.dmhelper.fragments.CreatePlayerFragment;
 import com.windcatcher.dmhelper.fragments.EditEncounterFragment;
 
 public class PopupFragmentActivity extends FragmentActivity {
@@ -24,7 +25,7 @@ public class PopupFragmentActivity extends FragmentActivity {
 	// ===========================================================
 
 	CombatFragment mCombatFrag;
-	
+
 	// ===========================================================
 	// TODO Constants
 	// ===========================================================
@@ -36,7 +37,8 @@ public class PopupFragmentActivity extends FragmentActivity {
 	public static final int
 	SCREEN_CREATE_CREATURE = 0,
 	SCREEN_EDIT_ENCOUNTER = 1,
-	SCREEN_COMBAT = 2;
+	SCREEN_COMBAT = 2,
+	SCREEN_CREATE_PLAYER = 3;
 
 
 	// ===========================================================
@@ -51,19 +53,20 @@ public class PopupFragmentActivity extends FragmentActivity {
 		Intent intent = getIntent();
 
 		int screenToPop = intent.getIntExtra(SCREEN_TO_POP, -1);
+		long rowID = intent.getLongExtra(ARGS_ROW, -1);
 
 		Fragment frag;
-		long rowID;
 		switch(screenToPop){
 		case SCREEN_CREATE_CREATURE:
-			frag = new CreateCreatureFragment();
+			frag = CreateCreatureFragment.newInstance(rowID);
+			break;
+		case SCREEN_CREATE_PLAYER:
+			frag = CreatePlayerFragment.newInstance(rowID);
 			break;
 		case SCREEN_COMBAT:
-			rowID = intent.getLongExtra(ARGS_ROW, -1);
 			frag = mCombatFrag = CombatFragment.newInstance(rowID);
 			break;
 		case SCREEN_EDIT_ENCOUNTER:
-			rowID = intent.getLongExtra(ARGS_ROW, -1);
 			frag = EditEncounterFragment.newInstance(rowID);
 			break;
 		default:
@@ -82,45 +85,46 @@ public class PopupFragmentActivity extends FragmentActivity {
 		// check for the combat fragment being visible, run the close dialog
 		if(mCombatFrag != null){
 			closeCombat(mCombatFrag.getEncounterRowID());
+			return;
 		}
-		
+		super.onBackPressed();
 	}
 
 	// ===========================================================
 	// TODO Methods
 	// ===========================================================
-	
+
 	private void closeCombat(final long rowID){
 		// create an alert dialog to see if the user wants to reset the encounter or save it's state
-					AlertDialog.Builder builder = new AlertDialog.Builder(this);
-					builder.setTitle(R.string.dialog_reset_combat)
-					.setPositiveButton(R.string.dialog_okay, new OnClickListener() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.dialog_reset_combat)
+		.setPositiveButton(R.string.dialog_okay, new OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// reset the encounter
-							EncounterTable.resetEncounter(GameSQLDataSource.getDatabase(PopupFragmentActivity.this), rowID);
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// reset the encounter
+				EncounterTable.resetEncounter(GameSQLDataSource.getDatabase(PopupFragmentActivity.this), rowID);
 
-							// null out the fragment reference to avoid leaking the activity
-							mCombatFrag = null;
-							
-							// close the activity
-							finish();
-						}
-					})
-					.setNegativeButton(R.string.dialog_no, new OnClickListener() {
+				// null out the fragment reference to avoid leaking the activity
+				mCombatFrag = null;
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// null out the fragment reference to avoid leaking the activity
-							mCombatFrag = null;
-							
-							// close the activity
-							finish();
-						}
-					});
-					builder.create().show();
+				// close the activity
+				finish();
+			}
+		})
+		.setNegativeButton(R.string.dialog_no, new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// null out the fragment reference to avoid leaking the activity
+				mCombatFrag = null;
+
+				// close the activity
+				finish();
+			}
+		});
+		builder.create().show();
 	}
 
-	
+
 }

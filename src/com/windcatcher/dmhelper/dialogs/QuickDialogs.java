@@ -191,6 +191,10 @@ public class QuickDialogs {
 			}
 		});
 	}
+	
+	public static void showNameExistsDialog(Context c){
+		showSingleOptionDialog(c, R.string.dialog_name_exists_title, R.string.dialog_name_exists, R.string.dialog_close, null);
+	}
 
 	// ===========================================================
 	// TODO Interfaces

@@ -80,6 +80,22 @@ public class CreaturesTable{
 		return path;
 	}
 	
+	public static boolean exists(SQLiteDatabase database, String name){
+		Cursor c = query(database);
+		while(c.moveToNext()){
+			if(c.getString(COLUMN_NAME.getNum()).equalsIgnoreCase(name)){	
+				c.close();
+				return true;
+			}
+		}
+		c.close();
+		return false;
+	}
+	
+	// ===========================================================
+	// TODO Base SQL Statements
+	// ===========================================================
+	
 	public static void drop(SQLiteDatabase database){
 		database.execSQL("DROP TABLE " + TABLE_NAME);
 	}

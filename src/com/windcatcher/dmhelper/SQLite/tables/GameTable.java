@@ -80,6 +80,10 @@ public class GameTable{
 		update(database, rowID, values);
 	}
 	
+	// ===========================================================
+	// TODO Base SQL Statements
+	// ===========================================================
+	
 	public static void drop(SQLiteDatabase database){
 		database.execSQL("DROP TABLE " + TABLE_NAME);
 	}
