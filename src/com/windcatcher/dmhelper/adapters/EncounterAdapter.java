@@ -38,7 +38,7 @@ public class EncounterAdapter extends CursorAdapter {
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		return inflater.inflate(R.layout.list_item_encounters, parent, false);
+		return inflater.inflate(R.layout.list_item_base_two_line, parent, false);
 	}
 
 	@Override
@@ -46,12 +46,12 @@ public class EncounterAdapter extends CursorAdapter {
 		int rowID = cursor.getInt(GameTable.COLUMN_ID.getNum());
 		// set the list item info from the cursor
 		// set the encounter title
-		TextView t = (TextView)view.findViewById(R.id.encounter_creature_list_name);
+		TextView t = (TextView)view.findViewById(R.id.list_item_base_line_one);
 		t.setText(String.format(t.getText().toString(), rowID + ""));
 		
 		// set the creature count
 		int count = EncounterTable.getCreatureCount(GameSQLDataSource.getDatabase(mContext), rowID);
-		t = (TextView)view.findViewById(R.id.encounter_creature_list_hp);
+		t = (TextView)view.findViewById(R.id.list_item_base_line_two);
 		t.setText(String.format(t.getText().toString(), count +""));
 	}
 

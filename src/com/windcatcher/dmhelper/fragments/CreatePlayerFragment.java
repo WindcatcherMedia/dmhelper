@@ -25,7 +25,8 @@ public class CreatePlayerFragment extends Fragment {
 	// TODO Fields
 	// ===========================================================
 	
-	private EditText mName;
+	private EditText mCharName;
+	private EditText mPlayerName;
 	
 	// ===========================================================
 	// TODO Constants
@@ -49,7 +50,8 @@ public class CreatePlayerFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_create_player, null); 
 
 		// grab the edit text references
-		mName = (EditText)v.findViewById(R.id.create_player_name);
+		mCharName = (EditText)v.findViewById(R.id.create_character_name);
+		mPlayerName = (EditText)v.findViewById(R.id.create_player_name);
 
 
 
@@ -59,7 +61,8 @@ public class CreatePlayerFragment extends Fragment {
 			// row exists, grab the information and populate the fields
 			Cursor c = PlayersTable.query(GameSQLDataSource.getDatabase(getActivity()), existingRow);
 			if(c.moveToFirst()){
-				mName.setText(c.getString(PlayersTable.COLUMN_NAME.getNum()));
+				mCharName.setText(c.getString(PlayersTable.COLUMN_NAME.getNum()));
+				mPlayerName.setText(c.getString(PlayersTable.COLUMN_PLAYER_NAME.getNum()));
 			}
 		}
 		
@@ -101,8 +104,13 @@ public class CreatePlayerFragment extends Fragment {
 	
 	private void savePlayer(){
 		// sanitize
-		final String name = mName.getText().toString();
+		final String name = mCharName.getText().toString();
 		if(name == null || name.isEmpty()){
+			QuickDialogs.showFieldNotNullDialog(getActivity(), FieldNames.Name);
+			return;
+		}
+		final String playerName = mPlayerName.getText().toString();
+		if(playerName == null || playerName.isEmpty()){
 			QuickDialogs.showFieldNotNullDialog(getActivity(), FieldNames.Name);
 			return;
 		}
@@ -114,7 +122,7 @@ public class CreatePlayerFragment extends Fragment {
 		}
 		
 		// save the player
-		PlayersTable.addPlayer(GameSQLDataSource.getDatabase(getActivity()), name);
+		PlayersTable.addPlayer(GameSQLDataSource.getDatabase(getActivity()), name, playerName);
 		
 		getActivity().finish();
 	}

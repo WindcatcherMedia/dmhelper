@@ -6,7 +6,7 @@
     android:rowCount="5">
 
     <TextView
-        android:id="@+id/encounter_creature_list_name"
+        android:id="@+id/list_item_base_line_one"
         android:layout_column="0"
         android:layout_gravity="left|top"
         android:layout_marginLeft="5dp"
@@ -15,7 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/encounter_creature_list_hp"
+        android:id="@+id/list_item_base_line_two"
         android:layout_column="0"
         android:layout_gravity="left|bottom"
         android:layout_marginLeft="5dp"

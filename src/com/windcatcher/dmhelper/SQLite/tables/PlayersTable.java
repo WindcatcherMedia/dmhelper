@@ -18,7 +18,8 @@ public class PlayersTable{
 	
 	public static final Column COLUMN_ID = new Column("_id", 0),
 			COLUMN_NAME = new Column("name", 1),
-			COLUMN_HP = new Column("hp", 2);
+			COLUMN_HP = new Column("hp", 2),
+			COLUMN_PLAYER_NAME = new Column("playerNme", 3);
 	
 	public static final String TABLE_NAME = "players";
 	
@@ -33,16 +34,20 @@ public class PlayersTable{
 	public static void createPlayerTable(SQLiteDatabase database){
 		// create the player table
 		database.execSQL("CREATE TABLE players " +
-				"(_id integer primary key autoincrement, " +
-				"name text not null, " +
-				"hp INTEGER NOT NULL)");
-		addPlayer(database, "blank");
+				"(" + COLUMN_ID + " integer primary key autoincrement, " +
+				COLUMN_NAME + " text not null, " +
+				COLUMN_HP + " INTEGER NOT NULL, " +
+				COLUMN_PLAYER_NAME + " text NOT NULL)");
+		// create a blank entry to account for encounter rows
+		// a row for a creature will have 0 for the player column
+		addPlayer(database, "blank", "blank");
 	}
 	
-	public static long addPlayer(SQLiteDatabase database, String name){
+	public static long addPlayer(SQLiteDatabase database, String name, String playerName){
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_NAME.getName(), name);
 		values.put(COLUMN_HP.getName(), 0);
+		values.put(COLUMN_PLAYER_NAME.getName(), playerName);
 		long rowID = database.insert(TABLE_NAME, null, values);
 		return rowID;
 	}

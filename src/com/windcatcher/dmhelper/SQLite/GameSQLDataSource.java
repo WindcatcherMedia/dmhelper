@@ -48,7 +48,7 @@ public class GameSQLDataSource extends SQLiteOpenHelper{
 	
 	private static String DB_PATH = "/data/data/com.windcatcher.dmhelper/databases/";
 
-	private static int VERSION = 17;
+	private static int VERSION = 18;
 
 
 	// ===========================================================

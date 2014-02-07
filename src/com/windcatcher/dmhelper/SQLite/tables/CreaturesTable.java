@@ -39,7 +39,8 @@ public class CreaturesTable{
 				COLUMN_HP + " INTEGER NOT NULL," +
 				COLUMN_INIT_MOD + " INTEGER NOT NULL," +
 				COLUMN_IMAGE + " text)");
-		
+		// create a blank entry to account for encounter rows
+		// a row for a player will have 0 for the creature column
 		addCreature(database, "blank", 0, 0, null);
 	}
 	

@@ -51,7 +51,7 @@ public class CombatAdapter extends CursorAdapter {
 		int init = cursor.getInt(EncounterTable.VIEW_READ_COLUMN_INIT.getNum());
 
 		// set the name
-		TextView t = (TextView)view.findViewById(R.id.encounter_creature_list_name);
+		TextView t = (TextView)view.findViewById(R.id.list_item_base_line_one);
 		// is this a player or creature
 		if(playerName.equals("blank")){			
 			t.setText(creatureName);
@@ -60,7 +60,7 @@ public class CombatAdapter extends CursorAdapter {
 		}
 
 		// set the hp
-		t = (TextView)view.findViewById(R.id.encounter_creature_list_hp);
+		t = (TextView)view.findViewById(R.id.list_item_base_line_two);
 		t.setText(hp + "/" + maxHP + " --- Init: " + init);
 		
 		// check to see if it should be highlighted because it's the current turn

@@ -46,7 +46,7 @@ public class CreaturePickFragment extends DialogFragment{
         Cursor c = CreaturesTable.query(GameSQLDataSource.getDatabase(getActivity()));
         
         // do the list items
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_edit_encounters_creatures, c, new String[] { CreaturesTable.COLUMN_NAME.getName(), CreaturesTable.COLUMN_HP.getName() }, new int[] { R.id.encounter_creature_list_name, R.id.encounter_creature_list_hp}, SimpleCursorAdapter.NO_SELECTION);
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_edit_encounters_creatures, c, new String[] { CreaturesTable.COLUMN_NAME.getName(), CreaturesTable.COLUMN_HP.getName() }, new int[] { R.id.list_item_base_line_one, R.id.list_item_base_line_two}, SimpleCursorAdapter.NO_SELECTION);
 
         builder.setAdapter(adapter, new OnClickListener() {
 			

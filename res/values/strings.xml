@@ -33,7 +33,8 @@
     <string name="dialog_reset_combat">Reset the encounter?</string>
     <string name="dialog_no">No</string>
     <string name="dialog_yes">Yes</string>
-    <string name="misc_name">Name:</string>
+    <string name="misc_name">Character Name:</string>
+    <string name="misc_player_name">Player Name:</string>
     <string name="misc_init">Initiative Modifier:</string>
     <string name="misc_hp">HP:</string>
     <string name="create_creature_take_image">Set Stats Picture</string>

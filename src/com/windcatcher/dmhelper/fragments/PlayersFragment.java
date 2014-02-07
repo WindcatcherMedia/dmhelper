@@ -46,7 +46,7 @@ public class PlayersFragment extends CursorListFragment {
 
 		Cursor c = getCursor();
 
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_edit_encounters_creatures, c, new String[] { PlayersTable.COLUMN_NAME.getName() }, new int[] { R.id.encounter_creature_list_name }, SimpleCursorAdapter.NO_SELECTION);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_base_two_line, c, new String[] { PlayersTable.COLUMN_NAME.getName(), PlayersTable.COLUMN_PLAYER_NAME.getName() }, new int[] { R.id.list_item_base_line_one, R.id.list_item_base_line_two }, SimpleCursorAdapter.NO_SELECTION);
 
 		initList(list, adapter);
 

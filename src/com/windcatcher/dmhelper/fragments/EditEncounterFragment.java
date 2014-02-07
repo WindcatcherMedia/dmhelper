@@ -58,7 +58,7 @@ public class EditEncounterFragment extends CursorListFragment {
 
 		int count = c.getCount();
 
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_edit_encounters_creatures, c, new String[] { EncounterTable.VIEW_EDIT_COLUMN_CREATURENAME.getName(), EncounterTable.VIEW_EDIT_COLUMN_HP.getName() }, new int[] { R.id.encounter_creature_list_name, R.id.encounter_creature_list_hp}, SimpleCursorAdapter.NO_SELECTION);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_edit_encounters_creatures, c, new String[] { EncounterTable.VIEW_EDIT_COLUMN_CREATURENAME.getName(), EncounterTable.VIEW_EDIT_COLUMN_HP.getName() }, new int[] { R.id.list_item_base_line_one, R.id.list_item_base_line_two}, SimpleCursorAdapter.NO_SELECTION);
 
 
 		initList(list, adapter);
