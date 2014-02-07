@@ -17,18 +17,7 @@ I'm keeping it consistent with common coding/naming practices. It's going to sta
 
 Pull requests are more than welcome.
 
-Here's a laundry list of feature hopefulls and their completion. (This will evolve over time, I'm sure)
-
-Storing:<br>
-~~Players~~<br>
-~~Encounters~~<br>
-~~Creatures~~<br>
-
-Combat View (~~auto-rolling initative, tracking HP~~/effects, ~~progressing turn through the initative order~~, notifying of effect expiry)<br>
-Campaign notes<br>
-Story arc notes
-
-And more to come as I come up with ideas...
+Check the Wiki for current features and their completion status.
 
 
 
@@ -36,8 +25,10 @@ And more to come as I come up with ideas...
 Future
 ========
 
-As time goes by and the app gets more and more fleshed out and useful. I would like to create a sort of online connection. It's going to suck having to type your campaign/story notes on a phone/tablet, it will also be a bummer having to make sure you have the same info if you use your tablet instead of your phone one day.
+As time goes by and the app gets more and more fleshed out and useful. I would like to create a sort of online cloud connection. It's going to suck having to type your campaign/story notes on a phone/tablet, it will also be a bummer having to make sure you have the same info if you use your tablet instead of your phone one day.
 
 This is why I'll be creating an online sync option. With a web-based form for entering information with a proper keyboard. This will allow you to sync across laptop, phone and tablet. Also you can share some of your information with your friends. Have 100 creatures built up and switching DM's? Pass your friend all of your creature information and save him some time. Have 2 DMs creating an epic campaign and story arc? Collaborate on the same campaign without having to worry about making sure you added their new entries and they added yours.
+
+I'm also mulling around the idea of working with the creator of Masterplan to get a kind of import system that brings in all of your campaign/story notes from Masterplan. It's a great program that makes building stories and worlds incredibly easily. (I haven't contacted him yet, so don't go asking him anything...)
 
 So far, these are pipe dreams. We'll see how long it takes before we're ready for that.
