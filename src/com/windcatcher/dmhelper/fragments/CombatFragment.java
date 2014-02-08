@@ -29,6 +29,8 @@ import com.windcatcher.dmhelper.SQLite.tables.GameTable;
 import com.windcatcher.dmhelper.SQLite.tables.PlayersTable;
 import com.windcatcher.dmhelper.activities.GameActivity;
 import com.windcatcher.dmhelper.adapters.CombatAdapter;
+import com.windcatcher.dmhelper.dialogs.QuickDialogs;
+import com.windcatcher.dmhelper.dialogs.QuickDialogs.IInputCallback;
 import com.windcatcher.dmhelper.views.TurnView;
 
 public class CombatFragment extends CursorListFragment {
@@ -122,17 +124,22 @@ public class CombatFragment extends CursorListFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
-		case R.id.menu_combat_menu_harm:
+		case R.id.menu_combat_harm:
+			harm();
 			return true;
 		case R.id.menu_combat_heal:
+			heal();
 			return true;
-		case R.id.menu_combat_menu_previous:
+		case R.id.menu_combat_previous:
+			previousTurn();
 			return true;
 		case R.id.menu_combat_remove_effect:
+			removeEffect();
 			return true;
 		case R.id.menu_combat_add_effect:
+			addEffect();
 			return true;
-		case R.id.menu_combat_menu_next:
+		case R.id.menu_combat_next:
 			nextTurn();
 			return true;
 		}
@@ -148,6 +155,79 @@ public class CombatFragment extends CursorListFragment {
 	// ===========================================================
 	// TODO Methods
 	// ===========================================================
+	
+	private void harm(){
+		// grab the selected ID
+		final long rowID = getSelectedRowID();
+		
+		// reset the selection
+		resetSelection();
+		
+		// show the dialog
+		QuickDialogs.showHarmDialog(getActivity(), new IInputCallback() {
+			
+			@Override
+			public void onInput(String input) {
+				int damage;
+				// convert the string to int
+				try{
+					damage = Integer.valueOf(input);
+				}catch(NumberFormatException e){
+					// TODO display incorrect input dialog
+					damage = 0;
+				}
+				
+				// deal dat damage!
+				EncounterTable.changeHP(GameSQLDataSource.getDatabase(getActivity()), rowID, -damage);
+				
+				refreshList();
+			}
+		});
+	}
+	
+	private void heal(){
+		// grab the selected ID
+				final long rowID = getSelectedRowID();
+				
+				// reset the selection
+				resetSelection();
+				
+				// show the dialog
+				QuickDialogs.showHealDialog(getActivity(), new IInputCallback() {
+					
+					@Override
+					public void onInput(String input) {
+						int damage;
+						// convert the string to int
+						try{
+							damage = Integer.valueOf(input);
+						}catch(NumberFormatException e){
+							// TODO display incorrect input dialog
+							damage = 0;
+						}
+						
+						// heal it up!
+						EncounterTable.changeHP(GameSQLDataSource.getDatabase(getActivity()), rowID, damage);				
+					}
+				});
+	}
+	
+	private void addEffect(){
+		
+	}
+	
+	private void removeEffect(){
+		
+	}
+
+	private void previousTurn(){
+		int currentTurnPosition = mTurnIndicator.previousTurn();
+		if(currentTurnPosition > -1){
+			CombatAdapter adapter = (CombatAdapter) getList().getAdapter();
+			adapter.setCurrentTurn(currentTurnPosition);
+			GameTable.setTurn(GameSQLDataSource.getDatabase(getActivity()), mEncounterRowID, currentTurnPosition);
+		}
+	}
 
 	private void nextTurn(){
 		int currentTurnPosition = mTurnIndicator.nextTurn();

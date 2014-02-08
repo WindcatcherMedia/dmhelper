@@ -22,7 +22,6 @@ import com.windcatcher.dmhelper.GlobalConfig;
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
 import com.windcatcher.dmhelper.SQLite.tables.CreaturesTable;
-import com.windcatcher.dmhelper.SQLite.tables.PlayersTable;
 import com.windcatcher.dmhelper.activities.CameraActivity;
 import com.windcatcher.dmhelper.camera.CreatureCameraHost;
 import com.windcatcher.dmhelper.dialogs.QuickDialogs;

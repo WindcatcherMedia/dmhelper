@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 
 import com.windcatcher.dmhelper.R;
 
@@ -19,6 +21,8 @@ public class QuickDialogs {
 
 	public enum FieldNames { Name, Init, HP };
 
+	public enum EntryType { String, Number };
+
 	// ===========================================================
 	// TODO Inherited Methods
 	// ===========================================================
@@ -26,6 +30,39 @@ public class QuickDialogs {
 	// ===========================================================
 	// TODO Methods
 	// ===========================================================
+
+	private static void showInputDialog(Context c, int titleID, int messageID, EntryType type, final IInputCallback listener){
+		// Create a textview for the entry
+		final EditText et = new EditText(c);
+		switch(type){
+		case Number:
+			et.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
+			break;
+		case String:
+			et.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+			break;
+		default:
+			throw new IllegalArgumentException("Must supply an EntryType for the input");
+		}
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(c);
+		
+		builder.setTitle(titleID);
+		if(messageID > -1){
+			builder.setMessage(messageID);
+		}
+		builder.setView(et)
+		.setPositiveButton(R.string.dialog_okay, new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				listener.onInput(et.getText().toString());
+			}
+		})
+		.setNegativeButton(R.string.dialog_close, null);
+		
+		builder.create().show();
+	}
 
 	/**
 	 * Shows a simple dialog with one option and a message
@@ -191,9 +228,17 @@ public class QuickDialogs {
 			}
 		});
 	}
-	
+
 	public static void showNameExistsDialog(Context c){
 		showSingleOptionDialog(c, R.string.dialog_name_exists_title, R.string.dialog_name_exists, R.string.dialog_close, null);
+	}
+
+	public static void showHarmDialog(Context c, IInputCallback callback){
+		showInputDialog(c, R.string.dialog_harm_title, -1, EntryType.Number, callback);
+	}
+
+	public static void showHealDialog(Context c, IInputCallback callback){
+		showInputDialog(c, R.string.dialog_heal_title, -1, EntryType.Number, callback);
 	}
 
 	// ===========================================================
@@ -238,5 +283,15 @@ public class QuickDialogs {
 		 * User has chosen to overwrite existing picture
 		 */
 		public void onOverwrite();
+	}
+
+	public interface IChangeHPCallback{
+
+		public void onHPChange(int change);
+	}
+
+	public interface IInputCallback{
+
+		public void onInput(String input);
 	}
 }

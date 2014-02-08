@@ -58,6 +58,8 @@
     <string name="dialog_close_app">Close App</string>
     <string name="dialog_name_exists_title">Already exists</string>
     <string name="dialog_name_exists">That name exists already</string>
+    <string name="dialog_harm_title">Harm...</string>
+    <string name="dialog_heal_title">Heal...</string>
     
 
 </resources>

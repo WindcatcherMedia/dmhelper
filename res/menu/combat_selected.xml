@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_combat_menu_harm"
+        android:id="@+id/menu_combat_harm"
         android:showAsAction="always"
         android:title="@string/action_harm">
     </item>

@@ -44,7 +44,7 @@ public class EncounterTable {
 	// ===========================================================
 	// TODO Methods
 	// ===========================================================
-	
+
 	public static void createEncounterTable(SQLiteDatabase database){
 		// create the table with the name as the id
 		database.execSQL("CREATE TABLE encounter (" +
@@ -58,11 +58,11 @@ public class EncounterTable {
 				"init INTEGER," +
 				"name TEXT)");
 	}
-	
+
 	public static void resetEncounter(SQLiteDatabase database, long encounter_id){
 		// delete all of the player records from the encounter
 		database.delete(TABLE_NAME, COLUMN_ENCOUNTER_ID + " = " + encounter_id + " AND " + COLUMN_PLAYER + " > 1", null);
-		
+
 		// set the encounter as not running
 		GameTable.setRunning(database, encounter_id, false);
 	}
@@ -76,15 +76,15 @@ public class EncounterTable {
 	 * Get's player readable information from the encounters. Combatants listed by their name as given by their ID relationships.
 	 * Column names are prefixed with VIEW_READ
 	 * @param database
-	 * @param rowID
+	 * @param encounter_id
 	 * @return
 	 */
-	public static Cursor getRunningEncounterInfo(SQLiteDatabase database, long rowID){
+	public static Cursor getRunningEncounterInfo(SQLiteDatabase database, long encounter_id){
 		Cursor c = database.rawQuery("select e." + COLUMN_ID + " as " + COLUMN_ID + ", p." + PlayersTable.COLUMN_NAME + " as " + VIEW_READ_COLUMN_PLAYERNAME + ", c." + CreaturesTable.COLUMN_NAME + " as " + VIEW_READ_COLUMN_CREATURENAME + ", e." + COLUMN_INIT + " as " + VIEW_READ_COLUMN_INIT + ", e." + COLUMN_HP + " as " + VIEW_READ_COLUMN_HP + ", e." + COLUMN_MAX_HP + " as " + VIEW_READ_COLUMN_MAXHP  + ", c." + CreaturesTable.COLUMN_INIT_MOD + " as " + VIEW_READ_COLUMN_INIT_MOD + " " +
 				"from " + TABLE_NAME + " as e " +
 				"join " + PlayersTable.TABLE_NAME + " as p on e." + COLUMN_PLAYER + " = p." + PlayersTable.COLUMN_ID + " " +
 				"join " + CreaturesTable.TABLE_NAME + " as c on e." + COLUMN_CREATURE + " = c." + CreaturesTable.COLUMN_ID + " " +
-				"where " + COLUMN_ENCOUNTER_ID + " = " + rowID +
+				"where " + COLUMN_ENCOUNTER_ID + " = " + encounter_id +
 				" order by e.init DESC", null);
 		return c;
 	}
@@ -93,15 +93,15 @@ public class EncounterTable {
 	 * Gets information used in editing encounters. Only Creatures and not bothering with max hp and init
 	 * Column names are prefixed with VIEW_EDIT
 	 * @param database
-	 * @param rowID
+	 * @param encounter_id
 	 * @return
 	 */
-	public static Cursor getEditEncounterInfo(SQLiteDatabase database, long rowID){
+	public static Cursor getEditEncounterInfo(SQLiteDatabase database, long encounter_id){
 		String querey = "select e." + COLUMN_ID + " as " + COLUMN_ID + ", c." + CreaturesTable.COLUMN_NAME + " as " + VIEW_EDIT_COLUMN_CREATURENAME + ", e." + COLUMN_HP + " as " + VIEW_EDIT_COLUMN_HP + ", c." + CreaturesTable.COLUMN_INIT_MOD + " as " + VIEW_EDIT_COLUMN_INIT_MOD + " " +
 				"from " + TABLE_NAME + " as e " +
 				"join " + CreaturesTable.TABLE_NAME + " as c on e." + COLUMN_CREATURE + " = c." + CreaturesTable.COLUMN_ID + " " +
-				"where e." + COLUMN_ENCOUNTER_ID + " = " + rowID + " AND e." + COLUMN_CREATURE + " > 1";
-		
+				"where e." + COLUMN_ENCOUNTER_ID + " = " + encounter_id + " AND e." + COLUMN_CREATURE + " > 1";
+
 		Cursor c = database.rawQuery(querey, null);
 		return c;
 	}
@@ -120,7 +120,7 @@ public class EncounterTable {
 		// use the returned rowID to update the hp and maxHP of said creature from the creature table
 		database.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMN_HP + " = (SELECT " + CreaturesTable.COLUMN_HP + " FROM " + CreaturesTable.TABLE_NAME + " WHERE " + CreaturesTable.COLUMN_ID + " = " + creatureID + " ), " + COLUMN_MAX_HP + " = (SELECT " + CreaturesTable.COLUMN_HP + " FROM " + CreaturesTable.TABLE_NAME + " WHERE " + CreaturesTable.COLUMN_ID + " = " + creatureID + " ) WHERE " + COLUMN_ID + " = " + rowID);
 	}
-	
+
 	public static void addPlayer(SQLiteDatabase database, long encounterID, long playerID, int init){
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_ENCOUNTER_ID.getName(), encounterID);
@@ -131,11 +131,11 @@ public class EncounterTable {
 		// use the returned rowID to update the hp and maxHP of said creature from the creature table
 		database.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMN_HP + " = (SELECT " + PlayersTable.COLUMN_HP + " FROM " + PlayersTable.TABLE_NAME + " WHERE " + PlayersTable.COLUMN_ID + " = " + playerID + " ), " + COLUMN_MAX_HP + " = (SELECT " + PlayersTable.COLUMN_HP + " FROM " + PlayersTable.TABLE_NAME + " WHERE " + PlayersTable.COLUMN_ID + " = " + playerID + " ) WHERE " + COLUMN_ID + " = " + rowID);
 	}
-	
+
 	public static void removeCreatures(SQLiteDatabase database, long rowID){
 		database.delete(TABLE_NAME, COLUMN_ID + " = " + rowID, null);
 	}
-	
+
 	/**
 	 * Removes all creatures of this type from all encounters.
 	 * @param database
@@ -153,34 +153,72 @@ public class EncounterTable {
 
 		return count;
 	}
-	
+
 	public static boolean hasPlayers(SQLiteDatabase database, long encounterID){
 		Cursor c = database.query(TABLE_NAME, null, COLUMN_ENCOUNTER_ID + " = " + encounterID + " and " + COLUMN_PLAYER + " > 1", null, null, null, null);
-		
+
 		boolean hasPlayers = c.getCount() > 0;
-		
+
 		c.close();
-		
+
 		return hasPlayers;
 	}
-	
+
+	public static void changeHP(SQLiteDatabase database, long rowID, int hpChange){
+		Cursor c = queryExact(database, rowID);
+
+		c.moveToFirst();
+
+		int currentHp = c.getInt(COLUMN_HP.getNum());
+		int maxHP = c.getInt(COLUMN_MAX_HP.getNum());
+
+		c.close();
+
+		int newHP;
+
+		if(currentHp + hpChange > maxHP){
+			newHP = maxHP;
+		}else if(currentHp + hpChange < 0){
+			newHP = 0;
+		}else{
+			newHP = currentHp + hpChange;
+		}
+
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_HP.getName(), newHP);
+
+		update(database, TABLE_NAME, rowID, values);
+	}
+
 	// ===========================================================
 	// TODO Base SQL Statements
 	// ===========================================================
 
-	public static void update(SQLiteDatabase database, String table, int id, ContentValues values){
-		database.update(table, values, COLUMN_ID + " = " + id, null);
+	public static int update(SQLiteDatabase database, String table, long id, ContentValues values){
+		int count = database.update(table, values, COLUMN_ID + " = " + id, null);
+		return count;
 	}
 
 	/**
-	 * Gets direct information from a specific row in an encounter. Combatants listed by their ID.
+	 * Gets information from a specific encounter.
 	 * 
 	 * @param database
 	 * @param encounter_id
-	 * @return
+	 * @return All creatures/players for an encounter_id
 	 */
 	public static Cursor query(SQLiteDatabase database, long encounter_id){
 		return database.query(TABLE_NAME, null, COLUMN_ENCOUNTER_ID + " = " + encounter_id, null, null, null, null);
+	}
+
+	/**
+	 * Gets direct information from a specific row in the table.
+	 * 
+	 * @param database
+	 * @param rowID
+	 * @return Single row from encounters table
+	 */
+	public static Cursor queryExact(SQLiteDatabase database, long rowID){
+		return database.query(TABLE_NAME, null, COLUMN_ID + " = " + rowID, null, null, null, null);
 	}
 
 	/**

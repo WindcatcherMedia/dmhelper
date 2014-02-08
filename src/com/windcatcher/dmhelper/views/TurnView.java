@@ -198,6 +198,28 @@ public class TurnView extends View{
 		}
 		return -1;
 	}
+	
+	/**
+	 * Set the next turn and return the new turn's position relative to the list row
+	 * @return A 0-based position of where the turn is relative from high initiative to low initiative.
+	 */
+	public int previousTurn(){
+		if(!mScrolling){
+			// animate the turn indicator down
+			if(mCurrentTurnCount + 1 < mTurnValues.size()){
+				mCurrentTurnCount ++;
+			}else{
+				mCurrentTurnCount = 0;
+			}
+			ObjectAnimator animator = ObjectAnimator.ofObject(this, "currentTurn", new FloatEvaluator(), mCurrentTurn, (float)Math.floor(mTurnValues.get(mCurrentTurnCount)));
+			animator.setDuration(500);
+			animator.start();
+			animator.addListener(mAnimationEnd);
+			mScrolling = true;
+			return mTurnValues.size() - mCurrentTurnCount - 1; // current turn starts high and works down, so we need to return the max - current to get the accurate return for the row position
+		}
+		return -1;
+	}
 
 	private float getIndicatorPosition(int height){
 		// get base at 0

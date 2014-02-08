@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/menu_combat_menu_next" android:title="@string/action_next_turn" android:showAsAction="always"></item>
-    <item android:id="@+id/menu_combat_menu_previous" android:showAsAction="ifRoom" android:title="@string/action_previous_turn"></item>
+
+    <item
+        android:id="@+id/menu_combat_next"
+        android:showAsAction="always"
+        android:title="@string/action_next_turn">
+    </item>
+    <item
+        android:id="@+id/menu_combat_previous"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_previous_turn">
+    </item>
+
 </menu>
