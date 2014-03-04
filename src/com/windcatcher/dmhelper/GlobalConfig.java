@@ -43,14 +43,11 @@ public class GlobalConfig {
 		Log.w(LOG_TAG, message);
 	}
 	
-	public static JSONArray remove(final long idx, final JSONArray from) {
-	    final List<JSONObject> objs = asList(from);
+	public static JSONArray remove(final int idx, final JSONArray from) {
+	    final List<Long> objs = asListLong(from);
 	    objs.remove(idx);
 
-	    final JSONArray ja = new JSONArray();
-	    for (final JSONObject obj : objs) {
-	        ja.put(obj);
-	    }
+	    final JSONArray ja = new JSONArray(objs);
 
 	    return ja;
 	}
@@ -61,6 +58,18 @@ public class GlobalConfig {
 	    for (int i = 0; i < len; i++) {
 	        final JSONObject obj = ja.optJSONObject(i);
 	        if (obj != null) {
+	            result.add(obj);
+	        }
+	    }
+	    return result;
+	}
+
+	public static List<Long> asListLong(final JSONArray ja) {
+	    final int len = ja.length();
+	    final ArrayList<Long> result = new ArrayList<Long>(len);
+	    for (int i = 0; i < len; i++) {
+	        final long obj = ja.optLong(i, -1);
+	        if (obj != -1) {
 	            result.add(obj);
 	        }
 	    }

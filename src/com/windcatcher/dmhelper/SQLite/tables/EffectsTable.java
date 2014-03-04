@@ -70,19 +70,6 @@ public class EffectsTable {
 	public static void removeEffect(SQLiteDatabase database, long rowID){
 		database.delete(TABLE_NAME, COLUMN_ID + " = " + rowID, null);
 	}
-	
-	public static Cursor query(SQLiteDatabase database, List<Long> rowIDs){
-		String query;
-		query = "Select * from " + TABLE_NAME + " where " + COLUMN_ID + " = " + rowIDs.get(0);
-		for(Long l: rowIDs){
-			query += " OR " + COLUMN_ID + " = " + l;
-		}
-		
-		Cursor c = database.rawQuery(query, null);
-		
-		
-		return c;
-	}
 
 	// ===========================================================
 	// TODO Base SQL Statements

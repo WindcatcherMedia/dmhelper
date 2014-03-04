@@ -112,7 +112,7 @@ public class EncountersTable {
 	public static Cursor getEditEncounterInfo(SQLiteDatabase database, long encounter_id){
 		String querey = 
 				"select e." + COLUMN_ID + " as " + COLUMN_ID + "," +
-				" c." + CreaturesTable.COLUMN_NAME + " as " + VIEW_EDIT_COLUMN_CREATURENAME +
+				" c." + CreaturesTable.COLUMN_NAME + " as " + VIEW_EDIT_COLUMN_CREATURENAME + "," +
 				" e." + COLUMN_HP + " as " + VIEW_EDIT_COLUMN_HP + "," +
 				" c." + CreaturesTable.COLUMN_INIT_MOD + " as " + VIEW_EDIT_COLUMN_INIT_MOD +
 				" from " + TABLE_NAME + " as e" +
@@ -254,7 +254,7 @@ public class EncountersTable {
 		try {
 			effectsArray = new JSONArray(effects);
 			// remove the effect at the given position
-			effectsArray = GlobalConfig.remove(position, effectsArray);
+			effectsArray = GlobalConfig.remove((int)position, effectsArray);
 		} catch (JSONException e) {
 			effectsArray = new JSONArray();
 			e.printStackTrace();

@@ -1,6 +1,7 @@
 package com.windcatcher.dmhelper.fragments.dialogs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +14,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
 
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
@@ -38,6 +41,8 @@ public class PickEffectFragment extends DialogFragment {
 
 	private static final String ARGS_ENCOUNTER_ROW_ID = "rowid";
 
+	private static final String MAP_EFFECT_NAME = "name", MAP_EFFECT_DESCRIPTION = "desc";
+
 
 	// ===========================================================
 	// TODO Inherited Methods
@@ -51,35 +56,45 @@ public class PickEffectFragment extends DialogFragment {
 		long encounterRowID = getArguments().getLong(ARGS_ENCOUNTER_ROW_ID);
 		// grab either a list of the saved effects, or the effects on a creature
 		Cursor c;
-		SimpleCursorAdapter adapter;
+		ListAdapter adapter;
 		if(encounterRowID > -1){
 			// grab the effects on the creature
-			c = EncountersTable.getRunningEncounterInfo(GameSQLDataSource.getDatabase(getActivity()), encounterRowID);
+			c = EncountersTable.queryExact(GameSQLDataSource.getDatabase(getActivity()), encounterRowID);
 			c.moveToFirst();
 			try {
 				// grab the json array of effects
-				JSONArray effectsJson = new JSONArray(c.getString(EncountersTable.VIEW_READ_COLUMN_EFFECTS.getNum()));
+				JSONArray effectsJson = new JSONArray(c.getString(EncountersTable.COLUMN_EFFECTS.getNum()));
 				// close up the previous cursor
 				c.close();
 
-				// store the effects in a list of long values
+				// 
 				int count = effectsJson.length();
-				ArrayList<Long> effectsList = new ArrayList<Long>();
+				// store a list of maps that store the effects
+				ArrayList<HashMap<String, String>> effects = new ArrayList<HashMap<String,String>>();
+				HashMap<String, String> effect;
+				long effectID;
 				for(int i = 0; i < count; i ++){
-					effectsList.add(effectsJson.getLong(i));
+					effectID = effectsJson.getLong(i);
+					effect = new HashMap<String, String>();
+
+					// grab the cursor for this effect
+					c = EffectsTable.queryExact(GameSQLDataSource.getDatabase(getActivity()), effectID);
+					c.moveToFirst();
+
+					effect.put(MAP_EFFECT_NAME, c.getString(EffectsTable.COLUMN_NAME.getNum()));
+					effect.put(MAP_EFFECT_DESCRIPTION, c.getString(EffectsTable.COLUMN_DESCRIPTION.getNum()));
+					
+					c.close();
+					
+					effects.add(effect);
 				}
 
-				// use the list to get a cursor from the effects table
-				c = EffectsTable.query(GameSQLDataSource.getDatabase(getActivity()), effectsList);
-
+				adapter = new SimpleAdapter(getActivity(), effects, R.layout.list_item_base_two_line, new String[] { MAP_EFFECT_NAME, MAP_EFFECT_DESCRIPTION}, new int[] {R.id.list_item_base_line_one, R.id.list_item_base_line_two});
 			} catch (JSONException e) {
-				c.close();
-
-				c = null;
 				e.printStackTrace(); 
+				adapter = null;
 			}
 
-			adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_edit_encounters_creatures, c, new String[] { EffectsTable.COLUMN_NAME.getName(), EffectsTable.COLUMN_DESCRIPTION.getName() }, new int[] { R.id.list_item_base_line_one, R.id.list_item_base_line_two}, SimpleCursorAdapter.NO_SELECTION);
 		}else{
 			c = EffectsTable.query(GameSQLDataSource.getDatabase(getActivity()));
 			adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_edit_encounters_creatures, c, new String[] { EffectsTable.COLUMN_NAME.getName(), EffectsTable.COLUMN_DESCRIPTION.getName() }, new int[] { R.id.list_item_base_line_one, R.id.list_item_base_line_two}, SimpleCursorAdapter.NO_SELECTION);
@@ -91,7 +106,7 @@ public class PickEffectFragment extends DialogFragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// grab the effect ID from the adapter
-				long effect = which;
+				long effect = which + 1;
 
 				if(mCallback != null){
 					mCallback.onEffectSelected(effect);
@@ -160,6 +175,10 @@ public class PickEffectFragment extends DialogFragment {
 
 	public interface IEffectSelectCallback{
 
+		/**
+		 * 
+		 * @param effectID 1 based integer relating to database _id's
+		 */
 		public void onEffectSelected(long effectID);
 
 		public void onNewEffectSelected();

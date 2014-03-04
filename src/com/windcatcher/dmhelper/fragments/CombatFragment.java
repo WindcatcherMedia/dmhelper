@@ -276,9 +276,8 @@ public class CombatFragment extends CursorListFragment {
 			public void onNewEffectSelected() {}
 			
 			@Override
-			public void onEffectSelected(long position) {
-				// effect id is a 0 based position of the effect in a creature's effects list, not the base effects list
-				EncountersTable.removeEffect(GameSQLDataSource.getDatabase(getActivity()), rowID, position);
+			public void onEffectSelected(long effectID) {
+				EncountersTable.removeEffect(GameSQLDataSource.getDatabase(getActivity()), rowID, effectID - 1);
 			}
 		});
 		
