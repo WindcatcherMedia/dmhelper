@@ -19,7 +19,8 @@ public class GameTable{
 	public static final Column COLUMN_ID = new Column("_id", 0),
 			COLUMN_ACTIVE = new Column("active", 1),
 			COLUMN_RUNNING = new Column("running", 2),
-			COLUMN_TURN = new Column("turn", 3);
+			COLUMN_TURN = new Column("turn", 3),
+			COLUMN_ROUND = new Column("round", 4);
 	
 	public static final String TABLE_NAME = "game";
 	
@@ -37,7 +38,8 @@ public class GameTable{
 				COLUMN_ID + " integer primary key autoincrement, " +
 				COLUMN_ACTIVE + " INTEGER DEFAULT 1," +
 				COLUMN_RUNNING + " INTEGER DEFAULT 0," +
-				COLUMN_TURN + " INTEGER DEFAULT 0)");
+				COLUMN_TURN + " INTEGER DEFAULT 0," +
+				COLUMN_ROUND + " INTEGER DEFAULT 0)");
 	}
 	
 	public static long createNewEncounter(SQLiteDatabase database){
@@ -78,6 +80,31 @@ public class GameTable{
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_TURN.getName(), turn);
 		update(database, rowID, values);
+	}
+	
+	public static void setRound(SQLiteDatabase database, long rowID, int round){
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_ROUND.getName(), round);
+		update(database, rowID, values);
+	}
+	
+	/**
+	 * Adds a single round to the database
+	 * 
+	 * @param database
+	 * @param rowID
+	 */
+	public static int addRound(SQLiteDatabase database, long rowID){
+		Cursor c = query(database, rowID);
+		c.moveToFirst();
+		
+		int round = c.getInt(COLUMN_ROUND.getNum());
+		
+		c.close();
+		
+		setRound(database, rowID, round + 1);
+		
+		return round + 1;
 	}
 	
 	// ===========================================================

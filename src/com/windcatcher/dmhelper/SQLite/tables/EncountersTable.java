@@ -1,12 +1,16 @@
 package com.windcatcher.dmhelper.SQLite.tables;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.windcatcher.dmhelper.GlobalConfig;
 import com.windcatcher.dmhelper.SQLite.Column;
 
-public class EncounterTable {
+public class EncountersTable {
 
 	// ===========================================================
 	// TODO Fields
@@ -34,7 +38,8 @@ public class EncounterTable {
 	VIEW_READ_COLUMN_INIT = new Column("init", 3),
 	VIEW_READ_COLUMN_HP = new Column("hp", 4),
 	VIEW_READ_COLUMN_MAXHP = new Column("max", 5),
-	VIEW_READ_COLUMN_INIT_MOD = new Column("initMod", 6);
+	VIEW_READ_COLUMN_INIT_MOD = new Column("initMod", 6),
+	VIEW_READ_COLUMN_EFFECTS = new Column("effects", 7);
 
 	public static final Column
 	VIEW_EDIT_COLUMN_CREATURENAME = new Column("cName", 1),
@@ -80,11 +85,19 @@ public class EncounterTable {
 	 * @return
 	 */
 	public static Cursor getRunningEncounterInfo(SQLiteDatabase database, long encounter_id){
-		Cursor c = database.rawQuery("select e." + COLUMN_ID + " as " + COLUMN_ID + ", p." + PlayersTable.COLUMN_NAME + " as " + VIEW_READ_COLUMN_PLAYERNAME + ", c." + CreaturesTable.COLUMN_NAME + " as " + VIEW_READ_COLUMN_CREATURENAME + ", e." + COLUMN_INIT + " as " + VIEW_READ_COLUMN_INIT + ", e." + COLUMN_HP + " as " + VIEW_READ_COLUMN_HP + ", e." + COLUMN_MAX_HP + " as " + VIEW_READ_COLUMN_MAXHP  + ", c." + CreaturesTable.COLUMN_INIT_MOD + " as " + VIEW_READ_COLUMN_INIT_MOD + " " +
-				"from " + TABLE_NAME + " as e " +
-				"join " + PlayersTable.TABLE_NAME + " as p on e." + COLUMN_PLAYER + " = p." + PlayersTable.COLUMN_ID + " " +
-				"join " + CreaturesTable.TABLE_NAME + " as c on e." + COLUMN_CREATURE + " = c." + CreaturesTable.COLUMN_ID + " " +
-				"where " + COLUMN_ENCOUNTER_ID + " = " + encounter_id +
+		Cursor c = database.rawQuery(
+				"select e." + COLUMN_ID + " as " + COLUMN_ID + "," +
+				" p." + PlayersTable.COLUMN_NAME + " as " + VIEW_READ_COLUMN_PLAYERNAME + "," +
+				" c." + CreaturesTable.COLUMN_NAME + " as " + VIEW_READ_COLUMN_CREATURENAME + "," +
+				" e." + COLUMN_INIT + " as " + VIEW_READ_COLUMN_INIT + "," +
+				" e." + COLUMN_HP + " as " + VIEW_READ_COLUMN_HP + "," +
+				" e." + COLUMN_MAX_HP + " as " + VIEW_READ_COLUMN_MAXHP  + "," +
+				" c." + CreaturesTable.COLUMN_INIT_MOD + " as " + VIEW_READ_COLUMN_INIT_MOD + "," +
+				" e." + COLUMN_EFFECTS + " as " + VIEW_READ_COLUMN_EFFECTS +
+				" from " + TABLE_NAME + " as e" +
+				" join " + PlayersTable.TABLE_NAME + " as p on e." + COLUMN_PLAYER + " = p." + PlayersTable.COLUMN_ID  +
+				" join " + CreaturesTable.TABLE_NAME + " as c on e." + COLUMN_CREATURE + " = c." + CreaturesTable.COLUMN_ID +
+				" where " + COLUMN_ENCOUNTER_ID + " = " + encounter_id +
 				" order by e.init DESC", null);
 		return c;
 	}
@@ -97,10 +110,14 @@ public class EncounterTable {
 	 * @return
 	 */
 	public static Cursor getEditEncounterInfo(SQLiteDatabase database, long encounter_id){
-		String querey = "select e." + COLUMN_ID + " as " + COLUMN_ID + ", c." + CreaturesTable.COLUMN_NAME + " as " + VIEW_EDIT_COLUMN_CREATURENAME + ", e." + COLUMN_HP + " as " + VIEW_EDIT_COLUMN_HP + ", c." + CreaturesTable.COLUMN_INIT_MOD + " as " + VIEW_EDIT_COLUMN_INIT_MOD + " " +
-				"from " + TABLE_NAME + " as e " +
-				"join " + CreaturesTable.TABLE_NAME + " as c on e." + COLUMN_CREATURE + " = c." + CreaturesTable.COLUMN_ID + " " +
-				"where e." + COLUMN_ENCOUNTER_ID + " = " + encounter_id + " AND e." + COLUMN_CREATURE + " > 1";
+		String querey = 
+				"select e." + COLUMN_ID + " as " + COLUMN_ID + "," +
+				" c." + CreaturesTable.COLUMN_NAME + " as " + VIEW_EDIT_COLUMN_CREATURENAME +
+				" e." + COLUMN_HP + " as " + VIEW_EDIT_COLUMN_HP + "," +
+				" c." + CreaturesTable.COLUMN_INIT_MOD + " as " + VIEW_EDIT_COLUMN_INIT_MOD +
+				" from " + TABLE_NAME + " as e" +
+				" join " + CreaturesTable.TABLE_NAME + " as c on e." + COLUMN_CREATURE + " = c." + CreaturesTable.COLUMN_ID +
+				" where e." + COLUMN_ENCOUNTER_ID + " = " + encounter_id + " AND e." + COLUMN_CREATURE + " > 1";
 
 		Cursor c = database.rawQuery(querey, null);
 		return c;
@@ -112,22 +129,35 @@ public class EncounterTable {
 	}
 
 	public static void addCreature(SQLiteDatabase database, long encounterID, long creatureID){
+		// create an empty json array
+		JSONArray array = new JSONArray();
+		
+		// set the values
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_ENCOUNTER_ID.getName(), encounterID);
 		values.put(COLUMN_CREATURE.getName(), creatureID);
+		values.put(COLUMN_EFFECTS.getName(), array.toString());
+		
 		// insert a row to enter the encounter ID and creature ID
 		long rowID = database.insert(TABLE_NAME, null, values);
+		
 		// use the returned rowID to update the hp and maxHP of said creature from the creature table
 		database.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMN_HP + " = (SELECT " + CreaturesTable.COLUMN_HP + " FROM " + CreaturesTable.TABLE_NAME + " WHERE " + CreaturesTable.COLUMN_ID + " = " + creatureID + " ), " + COLUMN_MAX_HP + " = (SELECT " + CreaturesTable.COLUMN_HP + " FROM " + CreaturesTable.TABLE_NAME + " WHERE " + CreaturesTable.COLUMN_ID + " = " + creatureID + " ) WHERE " + COLUMN_ID + " = " + rowID);
 	}
 
 	public static void addPlayer(SQLiteDatabase database, long encounterID, long playerID, int init){
+		// create an empty json array
+		JSONArray array = new JSONArray();
+		
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_ENCOUNTER_ID.getName(), encounterID);
 		values.put(COLUMN_PLAYER.getName(), playerID);
 		values.put(COLUMN_INIT.getName(), init);
+		values.put(COLUMN_EFFECTS.getName(), array.toString());
+		
 		// insert a row to enter the encounter ID and creature ID
 		long rowID = database.insert(TABLE_NAME, null, values);
+		
 		// use the returned rowID to update the hp and maxHP of said creature from the creature table
 		database.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMN_HP + " = (SELECT " + PlayersTable.COLUMN_HP + " FROM " + PlayersTable.TABLE_NAME + " WHERE " + PlayersTable.COLUMN_ID + " = " + playerID + " ), " + COLUMN_MAX_HP + " = (SELECT " + PlayersTable.COLUMN_HP + " FROM " + PlayersTable.TABLE_NAME + " WHERE " + PlayersTable.COLUMN_ID + " = " + playerID + " ) WHERE " + COLUMN_ID + " = " + rowID);
 	}
@@ -141,7 +171,7 @@ public class EncounterTable {
 	 * @param database
 	 * @param creatureID
 	 */
-	public static void removeAllCreatures(SQLiteDatabase database, long creatureID){
+	public static void removeAllCreaturesOfType(SQLiteDatabase database, long creatureID){
 		database.delete(TABLE_NAME, COLUMN_CREATURE + " = " + creatureID, null);
 	}
 
@@ -156,7 +186,7 @@ public class EncounterTable {
 
 	public static boolean hasPlayers(SQLiteDatabase database, long encounterID){
 		Cursor c = database.query(TABLE_NAME, null, COLUMN_ENCOUNTER_ID + " = " + encounterID + " and " + COLUMN_PLAYER + " > 1", null, null, null, null);
-
+		
 		boolean hasPlayers = c.getCount() > 0;
 
 		c.close();
@@ -187,15 +217,63 @@ public class EncounterTable {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_HP.getName(), newHP);
 
-		update(database, TABLE_NAME, rowID, values);
+		update(database, rowID, values);
+	}
+	
+	public static void addEffect(SQLiteDatabase database, long rowID, long effectID){
+		// grab the current effects to add it
+		Cursor c = queryExact(database, rowID);
+		c.moveToFirst();
+		
+		String effects = c.getString(COLUMN_EFFECTS.getNum());
+		
+		JSONArray effectsArray;
+		try {
+			effectsArray = new JSONArray(effects);
+			effectsArray.put(effectID);
+		} catch (JSONException e) {
+			effectsArray = new JSONArray();
+			e.printStackTrace();
+		}
+		
+		c.close();
+		
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_EFFECTS.getName(), effectsArray.toString());
+		update(database, rowID, values);
+	}
+	
+	public static void removeEffect(SQLiteDatabase database, long rowID, long position){
+		// grab the current effects
+		Cursor c = queryExact(database, rowID);
+		c.moveToFirst();
+		
+		String effects = c.getString(COLUMN_EFFECTS.getNum());
+		
+		JSONArray effectsArray;
+		try {
+			effectsArray = new JSONArray(effects);
+			// remove the effect at the given position
+			effectsArray = GlobalConfig.remove(position, effectsArray);
+		} catch (JSONException e) {
+			effectsArray = new JSONArray();
+			e.printStackTrace();
+		}
+		
+		c.close();
+		
+		// update the database
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_EFFECTS.getName(), effectsArray.toString());
+		update(database, rowID, values);
 	}
 
 	// ===========================================================
 	// TODO Base SQL Statements
 	// ===========================================================
 
-	public static int update(SQLiteDatabase database, String table, long id, ContentValues values){
-		int count = database.update(table, values, COLUMN_ID + " = " + id, null);
+	public static int update(SQLiteDatabase database, long id, ContentValues values){
+		int count = database.update(TABLE_NAME, values, COLUMN_ID + " = " + id, null);
 		return count;
 	}
 

@@ -1,4 +1,4 @@
-package com.windcatcher.dmhelper.dialogs;
+package com.windcatcher.dmhelper.fragments.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,9 +12,9 @@ import android.widget.EditText;
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
 
-public class NewGameDialog extends DialogFragment{
+public class NewGameFragment extends DialogFragment{
 
-	public NewGameDialog(Activity fragment){
+	public NewGameFragment(Activity fragment){
 		mActivity = fragment;
 	}
 	
@@ -36,12 +36,12 @@ public class NewGameDialog extends DialogFragment{
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.dialog_new_gamename);
+        builder.setTitle(R.string.new_gamename);
         // create a text view to name the game with
         final EditText tv = new EditText(getActivity());
         
         builder.setView(tv)
-        .setPositiveButton(R.string.dialog_okay, new OnClickListener() {
+        .setPositiveButton(R.string.okay, new OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -55,7 +55,7 @@ public class NewGameDialog extends DialogFragment{
 				mActivity = null;
 			}
 		})
-		.setNegativeButton(R.string.dialog_cancel, new OnClickListener() {
+		.setNegativeButton(R.string.cancel, new OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

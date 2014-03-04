@@ -1,5 +1,6 @@
 package com.windcatcher.dmhelper.views;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class TurnView extends View{
 	private int mMinTurn = 2;
 	private float mCurrentTurn;
 	private int mCurrentTurnCount;
-	private List<Short> mTurnValues;
+	private List<Short> mTurnValues = new ArrayList<Short>();
 
 	private boolean mScrolling = false;
 
@@ -79,6 +80,8 @@ public class TurnView extends View{
 	// ===========================================================
 	// TODO Constants
 	// ===========================================================
+
+	public static final int TURN_POSITION = 0, TURN_INIT = 1;
 
 	private final AnimatorListener mAnimationEnd = new AnimatorListener() {
 
@@ -179,9 +182,12 @@ public class TurnView extends View{
 
 	/**
 	 * Set the next turn and return the new turn's position relative to the list row
-	 * @return A 0-based position of where the turn is relative from high initiative to low initiative.
+	 * @return A size 2 array containing:
+	 * 0 position - A 0-based position of where the turn is relative from high initiative to low initiative.
+	 * 1 position - The initiative value of the current turn
 	 */
-	public int nextTurn(){
+	public int[] nextTurn(){
+		int[] turnInfo = new int[2];
 		if(!mScrolling){
 			// animate the turn indicator down
 			if(mCurrentTurnCount - 1 >= 0){
@@ -194,11 +200,15 @@ public class TurnView extends View{
 			animator.start();
 			animator.addListener(mAnimationEnd);
 			mScrolling = true;
-			return mTurnValues.size() - mCurrentTurnCount - 1; // current turn starts high and works down, so we need to return the max - current to get the accurate return for the row position
+			// current turn starts high and works down, so we need to return the max - current to get the accurate return for the row position
+			turnInfo[TURN_POSITION] = mTurnValues.size() - mCurrentTurnCount - 1;
+			turnInfo[TURN_INIT] = mTurnValues.get(mCurrentTurnCount);
+		}else{
+			turnInfo[TURN_POSITION] = -1;
 		}
-		return -1;
+		return turnInfo;
 	}
-	
+
 	/**
 	 * Set the next turn and return the new turn's position relative to the list row
 	 * @return A 0-based position of where the turn is relative from high initiative to low initiative.
@@ -239,14 +249,26 @@ public class TurnView extends View{
 		invalidate();
 	}
 
-	public void setCurrentTurnCount(int currentTurn){
+	/**
+	 * Sets the current turn on the indicator
+	 * 
+	 * @param currentTurn
+	 * @return The initiative value of the new turn that was set
+	 */
+	public int setCurrentTurnCount(int currentTurn){
 		mCurrentTurnCount = mTurnValues.size() - 1 - currentTurn;
 		this.mCurrentTurn = (float)Math.floor(mTurnValues.get(mCurrentTurnCount));
 		invalidate();
+		
+		return mTurnValues.get(mCurrentTurnCount);
 	}
 
 	public int getMaxTurns(){
 		return mMaxTurn;
+	}
+
+	public int getTurnCount(){
+		return mTurnValues.size();
 	}
 
 }

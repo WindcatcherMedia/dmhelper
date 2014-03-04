@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
-import com.windcatcher.dmhelper.SQLite.tables.EncounterTable;
+import com.windcatcher.dmhelper.SQLite.tables.EncountersTable;
 import com.windcatcher.dmhelper.SQLite.tables.GameTable;
 
 public class EncounterAdapter extends CursorAdapter {
@@ -50,7 +50,7 @@ public class EncounterAdapter extends CursorAdapter {
 		t.setText(String.format(t.getText().toString(), rowID + ""));
 		
 		// set the creature count
-		int count = EncounterTable.getCreatureCount(GameSQLDataSource.getDatabase(mContext), rowID);
+		int count = EncountersTable.getCreatureCount(GameSQLDataSource.getDatabase(mContext), rowID);
 		t = (TextView)view.findViewById(R.id.list_item_base_line_two);
 		t.setText(String.format(t.getText().toString(), count +""));
 	}

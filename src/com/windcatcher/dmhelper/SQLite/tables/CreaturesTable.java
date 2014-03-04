@@ -47,7 +47,7 @@ public class CreaturesTable{
 	public static void deleteCreature(SQLiteDatabase database, long id){
 		database.delete(TABLE_NAME, COLUMN_ID + " = " + id, null);
 		// remove from all encounters
-		EncounterTable.removeAllCreatures(database, id);
+		EncountersTable.removeAllCreaturesOfType(database, id);
 	}
 	
 	public static long addCreature(SQLiteDatabase database, String name, int hp, int initMod, String path){
@@ -64,9 +64,9 @@ public class CreaturesTable{
 	
 	public static String getCreatureImagePathFromEncounter(SQLiteDatabase database, long encounterID){
 		String querey = "select c." + COLUMN_IMAGE + " " +
-				"from " + EncounterTable.TABLE_NAME + " as e " +
-				"join " + TABLE_NAME + " as c on e." + EncounterTable.COLUMN_CREATURE + " = c." + CreaturesTable.COLUMN_ID + " " +
-				"where e." + EncounterTable.COLUMN_ID + " = " + encounterID;
+				"from " + EncountersTable.TABLE_NAME + " as e " +
+				"join " + TABLE_NAME + " as c on e." + EncountersTable.COLUMN_CREATURE + " = c." + CreaturesTable.COLUMN_ID + " " +
+				"where e." + EncountersTable.COLUMN_ID + " = " + encounterID;
 		
 		Cursor c = database.rawQuery(querey, null);
 		

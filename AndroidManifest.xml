@@ -39,7 +39,7 @@
             android:name=".activities.CameraActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".activities.PopupFragmentActivity"></activity>
+        <activity android:name=".activities.PopupFragmentActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

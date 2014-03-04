@@ -1,4 +1,4 @@
-package com.windcatcher.dmhelper.dialogs;
+package com.windcatcher.dmhelper.fragments.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,9 +13,9 @@ import com.windcatcher.dmhelper.GlobalConfig;
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
 
-public class LoadGameDialog extends DialogFragment{
+public class LoadGameFragment extends DialogFragment{
 
-	public LoadGameDialog(Activity activity){
+	public LoadGameFragment(Activity activity){
 		mActivity = activity;
 	}
 	
@@ -41,8 +41,8 @@ public class LoadGameDialog extends DialogFragment{
 
 		// Use the Builder class for convenient dialog construction
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(R.string.dialog_load_gamename)
-		.setNegativeButton(R.string.dialog_cancel, new OnClickListener() {
+		builder.setTitle(R.string.load_gamename)
+		.setNegativeButton(R.string.cancel, new OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

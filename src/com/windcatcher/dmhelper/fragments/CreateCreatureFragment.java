@@ -120,7 +120,7 @@ public class CreateCreatureFragment extends Fragment implements IPictureChoiceCa
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
-		case R.id.menu_create_creature_save:
+		case R.id.create_creature_save:
 			saveCreature();
 			return true;
 		default:

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/creatures_new"
+        android:id="@+id/effects_new"
         android:showAsAction="always"
         android:title="@string/string_new">
     </item>

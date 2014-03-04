@@ -80,7 +80,7 @@ public class CreatePlayerFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
-		case R.id.menu_create_player_save:
+		case R.id.create_player_save:
 			savePlayer();
 			return true;
 		default:

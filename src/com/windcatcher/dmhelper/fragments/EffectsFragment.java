@@ -1,6 +1,5 @@
 package com.windcatcher.dmhelper.fragments;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,10 +11,10 @@ import android.widget.SimpleCursorAdapter;
 
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
-import com.windcatcher.dmhelper.SQLite.tables.PlayersTable;
-import com.windcatcher.dmhelper.activities.PopupFragmentActivity;
+import com.windcatcher.dmhelper.SQLite.tables.EffectsTable;
+import com.windcatcher.dmhelper.fragments.dialogs.CreateEffectFragment;
 
-public class PlayersFragment extends CursorListFragment {
+public class EffectsFragment extends CursorListFragment {
 
 	// ===========================================================
 	// TODO Fields
@@ -25,13 +24,13 @@ public class PlayersFragment extends CursorListFragment {
 	// TODO Constants
 	// ===========================================================
 
-
 	// ===========================================================
 	// TODO Inherited Methods
 	// ===========================================================
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		initMenu(R.menu.players_selected, R.menu.players);
+		initMenu(R.menu.effects_selected, R.menu.effects);
 
 		setHasOptionsMenu(true);
 
@@ -46,7 +45,7 @@ public class PlayersFragment extends CursorListFragment {
 
 		Cursor c = getCursor();
 
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_base_two_line, c, new String[] { PlayersTable.COLUMN_NAME.getName(), PlayersTable.COLUMN_PLAYER_NAME.getName() }, new int[] { R.id.list_item_base_line_one, R.id.list_item_base_line_two }, SimpleCursorAdapter.NO_SELECTION);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_base_two_line, c, new String[] { EffectsTable.COLUMN_NAME.getName(), EffectsTable.COLUMN_DESCRIPTION.getName() }, new int[] { R.id.list_item_base_line_one, R.id.list_item_base_line_two }, SimpleCursorAdapter.NO_SELECTION);
 
 		initList(list, adapter);
 
@@ -54,53 +53,47 @@ public class PlayersFragment extends CursorListFragment {
 	}
 
 	@Override
+	protected Cursor getCursor() { 
+		return EffectsTable.query(GameSQLDataSource.getDatabase(getActivity()));
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
-		case R.id.players_new:
-			newPlayer();
+		case R.id.effects_new:
+			newEffect();
 			return true;
-		case R.id.players_remove:
-			removePlayer();
+		case R.id.effects_remove:
+			removeEffect();
 			return true;
-		case R.id.players_edit:
-			editPlayer();
+		case R.id.effects_edit:
+			editEffect();
 			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	protected Cursor getCursor() {
-		return PlayersTable.query(GameSQLDataSource.getDatabase(getActivity()));
-	}
-
 	// ===========================================================
 	// TODO Methods
 	// ===========================================================
-
-	private void newPlayer(){
-		Intent i = new Intent(getActivity(), PopupFragmentActivity.class);
-		i.putExtra(PopupFragmentActivity.SCREEN_TO_POP, PopupFragmentActivity.SCREEN_CREATE_PLAYER);
-		startActivity(i);
+	
+	private void newEffect(){
+		CreateEffectFragment eff = CreateEffectFragment.newInstance(null, this);
+		eff.show(getFragmentManager(), "dialog");
 	}
 
-	private void editPlayer(){
-		long rowID = getSelectedRowID();
-
+	private void editEffect(){
+		CreateEffectFragment eff = CreateEffectFragment.newInstance(null, this, getSelectedRowID());
+		eff.show(getFragmentManager(), "dialog");
+		
 		resetSelection();
-
-		// bring up the create creatures screen with a row argument
-		Intent intent = new Intent(getActivity(), PopupFragmentActivity.class);
-		intent.putExtra(PopupFragmentActivity.SCREEN_TO_POP, PopupFragmentActivity.SCREEN_CREATE_PLAYER);
-		intent.putExtra(PopupFragmentActivity.ARGS_ROW, rowID);
-		getActivity().startActivity(intent);
 	}
 
-	private void removePlayer(){
+	private void removeEffect(){
 		// TODO confirm remove dialog!
 
-		PlayersTable.removePlayer(GameSQLDataSource.getDatabase(getActivity()), getSelectedRowID());
+		EffectsTable.removeEffect(GameSQLDataSource.getDatabase(getActivity()), getSelectedRowID());
 
 		resetSelection();
 		refreshList();

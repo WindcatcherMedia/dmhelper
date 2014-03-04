@@ -7,8 +7,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.windcatcher.dmhelper.R;
-import com.windcatcher.dmhelper.dialogs.LoadGameDialog;
-import com.windcatcher.dmhelper.dialogs.NewGameDialog;
+import com.windcatcher.dmhelper.fragments.dialogs.LoadGameFragment;
+import com.windcatcher.dmhelper.fragments.dialogs.NewGameFragment;
 
 public class FrontMenuActivity extends FragmentActivity implements OnClickListener{
 
@@ -20,7 +20,7 @@ public class FrontMenuActivity extends FragmentActivity implements OnClickListen
 	// TODO Constants
 	// ===========================================================
 
-	private static final int DIALOG_NEW = 0, DIALOG_LOAD = 1;
+	private static final int NEW = 0, LOAD = 1;
 	
 	// ===========================================================
 	// TODO Inherited Methods
@@ -44,10 +44,10 @@ public class FrontMenuActivity extends FragmentActivity implements OnClickListen
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.main_newgame:
-			new NewGameDialog(this).show(getSupportFragmentManager(), "NewGame");
+			new NewGameFragment(this).show(getSupportFragmentManager(), "NewGame");
 			break;
 		case R.id.main_loadgame:
-			new LoadGameDialog(this).show(getSupportFragmentManager(), "LoadGame");
+			new LoadGameFragment(this).show(getSupportFragmentManager(), "LoadGame");
 			break;
 		}
 	}

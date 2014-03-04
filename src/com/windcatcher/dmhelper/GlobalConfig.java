@@ -1,6 +1,11 @@
 package com.windcatcher.dmhelper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.util.Log;
 
@@ -36,5 +41,29 @@ public class GlobalConfig {
 
 	public static void log(String message){
 		Log.w(LOG_TAG, message);
+	}
+	
+	public static JSONArray remove(final long idx, final JSONArray from) {
+	    final List<JSONObject> objs = asList(from);
+	    objs.remove(idx);
+
+	    final JSONArray ja = new JSONArray();
+	    for (final JSONObject obj : objs) {
+	        ja.put(obj);
+	    }
+
+	    return ja;
+	}
+
+	public static List<JSONObject> asList(final JSONArray ja) {
+	    final int len = ja.length();
+	    final ArrayList<JSONObject> result = new ArrayList<JSONObject>(len);
+	    for (int i = 0; i < len; i++) {
+	        final JSONObject obj = ja.optJSONObject(i);
+	        if (obj != null) {
+	            result.add(obj);
+	        }
+	    }
+	    return result;
 	}
 }

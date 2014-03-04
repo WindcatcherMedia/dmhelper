@@ -24,4 +24,13 @@
         android:layout_row="2"
         android:text="hp" />
 
+    <TextView
+        android:id="@+id/list_item_base_line_two_right"
+        android:layout_column="2"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_row="2"
+        android:text="" />
+
 </GridLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/menu_encounter_edit_add" android:title="@string/menu_add" android:showAsAction="always"></item>
+    <item android:id="@+id/encounter_edit_add" android:title="@string/add" android:showAsAction="always"></item>
     
 
 </menu>

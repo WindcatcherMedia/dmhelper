@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
-import com.windcatcher.dmhelper.SQLite.tables.EncounterTable;
+import com.windcatcher.dmhelper.SQLite.tables.EncountersTable;
 import com.windcatcher.dmhelper.fragments.CombatFragment;
 import com.windcatcher.dmhelper.fragments.CreateCreatureFragment;
 import com.windcatcher.dmhelper.fragments.CreatePlayerFragment;
@@ -97,13 +97,13 @@ public class PopupFragmentActivity extends FragmentActivity {
 	private void closeCombat(final long rowID){
 		// create an alert dialog to see if the user wants to reset the encounter or save it's state
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.dialog_reset_combat)
-		.setPositiveButton(R.string.dialog_okay, new OnClickListener() {
+		builder.setTitle(R.string.reset_combat)
+		.setPositiveButton(R.string.okay, new OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// reset the encounter
-				EncounterTable.resetEncounter(GameSQLDataSource.getDatabase(PopupFragmentActivity.this), rowID);
+				EncountersTable.resetEncounter(GameSQLDataSource.getDatabase(PopupFragmentActivity.this), rowID);
 
 				// null out the fragment reference to avoid leaking the activity
 				mCombatFrag = null;
@@ -112,7 +112,7 @@ public class PopupFragmentActivity extends FragmentActivity {
 				finish();
 			}
 		})
-		.setNegativeButton(R.string.dialog_no, new OnClickListener() {
+		.setNegativeButton(R.string.no, new OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

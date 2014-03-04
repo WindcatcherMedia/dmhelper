@@ -13,7 +13,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.windcatcher.dmhelper.GlobalConfig;
 import com.windcatcher.dmhelper.SQLite.tables.CreaturesTable;
-import com.windcatcher.dmhelper.SQLite.tables.EncounterTable;
+import com.windcatcher.dmhelper.SQLite.tables.EffectsTable;
+import com.windcatcher.dmhelper.SQLite.tables.EncountersTable;
 import com.windcatcher.dmhelper.SQLite.tables.GameTable;
 import com.windcatcher.dmhelper.SQLite.tables.PlayersTable;
 import com.windcatcher.dmhelper.activities.GameActivity;
@@ -48,7 +49,7 @@ public class GameSQLDataSource extends SQLiteOpenHelper{
 	
 	private static String DB_PATH = "/data/data/com.windcatcher.dmhelper/databases/";
 
-	private static int VERSION = 18;
+	private static int VERSION = 19;
 
 
 	// ===========================================================
@@ -62,7 +63,8 @@ public class GameSQLDataSource extends SQLiteOpenHelper{
 		PlayersTable.createPlayerTable(db);
 		GameTable.createGameTable(db);
 		CreaturesTable.createCreaturesTable(db);
-		EncounterTable.createEncounterTable(db);
+		EncountersTable.createEncounterTable(db);
+		EffectsTable.createEffectsTable(db);
 		
 		// add some default data
 		addDefaultData(db);
@@ -74,7 +76,8 @@ public class GameSQLDataSource extends SQLiteOpenHelper{
 		PlayersTable.drop(db);
 		GameTable.drop(db);
 		CreaturesTable.drop(db);
-		EncounterTable.drop(db);
+		EncountersTable.drop(db);
+		EffectsTable.drop(db);
 		// start anew
 		onCreate(db);
 	}

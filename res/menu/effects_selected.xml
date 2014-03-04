@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/combat_next"
+        android:id="@+id/effects_edit"
         android:showAsAction="always"
-        android:title="@string/next_turn">
+        android:title="@string/edit">
     </item>
     <item
-        android:id="@+id/combat_previous"
+        android:id="@+id/effects_remove"
         android:showAsAction="ifRoom"
-        android:title="@string/previous_turn">
+        android:title="@string/remove">
     </item>
 
 </menu>

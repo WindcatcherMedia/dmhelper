@@ -11,8 +11,8 @@ import android.widget.SimpleCursorAdapter;
 
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
-import com.windcatcher.dmhelper.SQLite.tables.EncounterTable;
-import com.windcatcher.dmhelper.dialogs.CreaturePickFragment;
+import com.windcatcher.dmhelper.SQLite.tables.EncountersTable;
+import com.windcatcher.dmhelper.fragments.dialogs.PickCreatureFragment;
 
 public class EditEncounterFragment extends CursorListFragment {
 
@@ -58,7 +58,7 @@ public class EditEncounterFragment extends CursorListFragment {
 
 		int count = c.getCount();
 
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_edit_encounters_creatures, c, new String[] { EncounterTable.VIEW_EDIT_COLUMN_CREATURENAME.getName(), EncounterTable.VIEW_EDIT_COLUMN_HP.getName() }, new int[] { R.id.list_item_base_line_one, R.id.list_item_base_line_two}, SimpleCursorAdapter.NO_SELECTION);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.list_item_edit_encounters_creatures, c, new String[] { EncountersTable.VIEW_EDIT_COLUMN_CREATURENAME.getName(), EncountersTable.VIEW_EDIT_COLUMN_HP.getName() }, new int[] { R.id.list_item_base_line_one, R.id.list_item_base_line_two}, SimpleCursorAdapter.NO_SELECTION);
 
 
 		initList(list, adapter);
@@ -70,13 +70,13 @@ public class EditEncounterFragment extends CursorListFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
-		case R.id.menu_encounter_edit_add:
+		case R.id.encounter_edit_add:
 			addCreature();
 			return true;
-		case R.id.menu_encounter_edit_remove:
+		case R.id.encounter_edit_remove:
 			removeCreature();
 			return true;
-		case R.id.menu_encounter_edit_edit:
+		case R.id.encounter_edit_edit:
 			return true;
 		}
 
@@ -89,7 +89,7 @@ public class EditEncounterFragment extends CursorListFragment {
 
 	@Override
 	protected Cursor getCursor() {
-		return EncounterTable.getEditEncounterInfo(GameSQLDataSource.getDatabase(getActivity()), mEncounterRowID);
+		return EncountersTable.getEditEncounterInfo(GameSQLDataSource.getDatabase(getActivity()), mEncounterRowID);
 	}
 
 	// ===========================================================
@@ -97,7 +97,7 @@ public class EditEncounterFragment extends CursorListFragment {
 	// ===========================================================
 
 	private void addCreature(){
-		new CreaturePickFragment(this, mEncounterRowID).show(getFragmentManager(), null);
+		new PickCreatureFragment(this, mEncounterRowID).show(getFragmentManager(), null);
 		
 		refreshList();
 	}
@@ -107,7 +107,7 @@ public class EditEncounterFragment extends CursorListFragment {
 	}
 
 	private void removeCreature(){
-		EncounterTable.removeCreatures(GameSQLDataSource.getDatabase(getActivity()), getSelectedRowID());
+		EncountersTable.removeCreatures(GameSQLDataSource.getDatabase(getActivity()), getSelectedRowID());
 
 		refreshList();
 		

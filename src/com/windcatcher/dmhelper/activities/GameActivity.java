@@ -15,6 +15,7 @@ import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.dialogs.QuickDialogs;
 import com.windcatcher.dmhelper.dialogs.QuickDialogs.IQuitCallback;
 import com.windcatcher.dmhelper.fragments.CreaturesFragment;
+import com.windcatcher.dmhelper.fragments.EffectsFragment;
 import com.windcatcher.dmhelper.fragments.EncountersFragment;
 import com.windcatcher.dmhelper.fragments.PlayersFragment;
 
@@ -102,6 +103,9 @@ ActionBar.OnNavigationListener, OnBackStackChangedListener {
 			break;
 		case 2:
 			fragment = new CreaturesFragment();
+			break;
+		case 3:
+			fragment = new EffectsFragment();
 			break;
 		}
 		Bundle args = new Bundle();

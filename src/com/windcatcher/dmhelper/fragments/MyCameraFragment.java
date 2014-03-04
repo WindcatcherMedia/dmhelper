@@ -103,7 +103,7 @@ public class MyCameraFragment extends CameraFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_camera:
+		case R.id.camera:
 			takePicture();
 			return true;
 		}

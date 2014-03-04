@@ -6,9 +6,14 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-
 import com.windcatcher.dmhelper.R;
 
+/**
+ * This is a simple wrapper class for simple dialogs.
+ * 
+ * @author Tyler
+ *
+ */
 public class QuickDialogs {
 
 	// ===========================================================
@@ -19,7 +24,7 @@ public class QuickDialogs {
 	// TODO Constants
 	// ===========================================================
 
-	public enum FieldNames { Name, Init, HP };
+	public enum FieldNames { Name, Init, HP, Description, Damage };
 
 	public enum EntryType { String, Number };
 
@@ -52,14 +57,14 @@ public class QuickDialogs {
 			builder.setMessage(messageID);
 		}
 		builder.setView(et)
-		.setPositiveButton(R.string.dialog_okay, new OnClickListener() {
+		.setPositiveButton(R.string.okay, new OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				listener.onInput(et.getText().toString());
 			}
 		})
-		.setNegativeButton(R.string.dialog_close, null);
+		.setNegativeButton(R.string.close, null);
 		
 		builder.create().show();
 	}
@@ -129,7 +134,7 @@ public class QuickDialogs {
 	}
 
 	public static void showPictureChooserDialog(Context c, final IPictureChoiceCallback choiceCallback){
-		showTripleOptionDialog(c, R.string.dialog_picture_choose, -1, R.string.dialog_gallery, R.string.dialog_camera, R.string.dialog_cancel, new OnClickListener() {
+		showTripleOptionDialog(c, R.string.picture_choose, -1, R.string.gallery, R.string.camera, R.string.cancel, new OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -149,7 +154,7 @@ public class QuickDialogs {
 	}
 
 	public static void showPictureOverwriteDialog(Context c, final IPictureOverwriteCallback callback){
-		showDoubleOptionDialog(c, R.string.create_creature_overwrite_picture_title, R.string.create_creature_overwrite_picture, R.string.dialog_overwrite, R.string.dialog_cancel,
+		showDoubleOptionDialog(c, R.string.create_creature_overwrite_picture_title, R.string.create_creature_overwrite_picture, R.string.overwrite, R.string.cancel,
 				new OnClickListener() {
 
 			@Override
@@ -166,33 +171,42 @@ public class QuickDialogs {
 		int messageID = -1;
 		switch(fn){
 		case Init:
-			messageID = R.string.dialog_hp_init_need_numbers;
+			messageID = R.string.hp_init_need_numbers;
 			break;
 		case Name:
-			messageID = R.string.dialog_hp_init_need_numbers;
+			messageID = R.string.hp_init_need_numbers;
+			break;
+		case Damage:
+			messageID = R.string.damage_need_numbers;
 			break;
 		}
-		showSingleOptionDialog(c, R.string.dialog_wrong_input, messageID, R.string.dialog_close, null);
+		showSingleOptionDialog(c, R.string.wrong_input, messageID, R.string.close, null);
 	}
 
 	public static void showFieldNotNullDialog(Context c, FieldNames fn){
 		int messageID = -1;
 		switch(fn){
 		case HP:
-			messageID = R.string.dialog_hp_not_null;
+			messageID = R.string.hp_not_null;
 			break;
 		case Init:
-			messageID = R.string.dialog_init_not_null;
+			messageID = R.string.init_not_null;
 			break;
 		case Name:
-			messageID = R.string.dialog_name_not_null;
+			messageID = R.string.name_not_null;
+			break;
+		case Damage:
+			messageID = R.string.damage_not_null;
+			break;
+		case Description:
+			messageID = R.string.description_not_null;
 			break;
 		}
-		showSingleOptionDialog(c, R.string.dialog_wrong_input, messageID, R.string.dialog_close, null);
+		showSingleOptionDialog(c, R.string.wrong_input, messageID, R.string.close, null);
 	}
 
 	public static void showNoImageDialog(Context c, final INoPictureCallback callback){
-		showDoubleOptionDialog(c, R.string.dialog_no_image_title, R.string.dialog_no_image, R.string.dialog_yes, R.string.dialog_no
+		showDoubleOptionDialog(c, R.string.no_image_title, R.string.no_image, R.string.yes, R.string.no
 				, new OnClickListener() {
 
 			@Override
@@ -213,7 +227,7 @@ public class QuickDialogs {
 	}
 
 	public static void showQuitDialog(Context c, final IQuitCallback callback){
-		showDoubleOptionDialog(c, R.string.dialog_quit_title, R.string.dialog_quit_or_back, R.string.dialog_main_menu, R.string.dialog_close_app, 
+		showDoubleOptionDialog(c, R.string.quit_title, R.string.quit_or_back, R.string.main_menu, R.string.close_app, 
 				new OnClickListener() {
 
 			@Override
@@ -230,15 +244,15 @@ public class QuickDialogs {
 	}
 
 	public static void showNameExistsDialog(Context c){
-		showSingleOptionDialog(c, R.string.dialog_name_exists_title, R.string.dialog_name_exists, R.string.dialog_close, null);
+		showSingleOptionDialog(c, R.string.name_exists_title, R.string.name_exists, R.string.close, null);
 	}
 
 	public static void showHarmDialog(Context c, IInputCallback callback){
-		showInputDialog(c, R.string.dialog_harm_title, -1, EntryType.Number, callback);
+		showInputDialog(c, R.string.harm_title, -1, EntryType.Number, callback);
 	}
 
 	public static void showHealDialog(Context c, IInputCallback callback){
-		showInputDialog(c, R.string.dialog_heal_title, -1, EntryType.Number, callback);
+		showInputDialog(c, R.string.heal_title, -1, EntryType.Number, callback);
 	}
 
 	// ===========================================================
@@ -293,5 +307,10 @@ public class QuickDialogs {
 	public interface IInputCallback{
 
 		public void onInput(String input);
+	}
+	
+	public interface INewEffectSelectCallback{
+		
+		public void onNewEffectCreated(long effectID);
 	}
 }

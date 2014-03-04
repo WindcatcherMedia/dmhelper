@@ -1,4 +1,4 @@
-package com.windcatcher.dmhelper.dialogs;
+package com.windcatcher.dmhelper.fragments.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,12 +12,12 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import com.windcatcher.dmhelper.R;
 import com.windcatcher.dmhelper.SQLite.GameSQLDataSource;
 import com.windcatcher.dmhelper.SQLite.tables.CreaturesTable;
-import com.windcatcher.dmhelper.SQLite.tables.EncounterTable;
+import com.windcatcher.dmhelper.SQLite.tables.EncountersTable;
 import com.windcatcher.dmhelper.fragments.EditEncounterFragment;
 
-public class CreaturePickFragment extends DialogFragment{
+public class PickCreatureFragment extends DialogFragment{
 	
-	public CreaturePickFragment(EditEncounterFragment fragment, long encounterID){
+	public PickCreatureFragment(EditEncounterFragment fragment, long encounterID){
 		mParentFragment = fragment;
 		mEncounterID = encounterID;
 	}
@@ -41,7 +41,7 @@ public class CreaturePickFragment extends DialogFragment{
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.dialog_pick_creature);
+        builder.setTitle(R.string.pick_creature);
 
         Cursor c = CreaturesTable.query(GameSQLDataSource.getDatabase(getActivity()));
         
@@ -61,7 +61,7 @@ public class CreaturePickFragment extends DialogFragment{
 				c.close();
 				
 				// add this creature and refresh the creature list.
-				EncounterTable.addCreature(GameSQLDataSource.getDatabase(getActivity()), mEncounterID, creatureID);
+				EncountersTable.addCreature(GameSQLDataSource.getDatabase(getActivity()), mEncounterID, creatureID);
 				mParentFragment.refreshList();
 			}
 		});

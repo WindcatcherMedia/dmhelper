@@ -58,16 +58,16 @@ public class EncountersFragment extends CursorListFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
-		case R.id.menu_encounters_delete:
+		case R.id.encounters_delete:
 			deleteEncounter(getSelectedRowID());
 			return true;
-		case R.id.menu_encounters_edit:
+		case R.id.encounters_edit:
 			editEncounter();
 			return true;
-		case R.id.menu_encounters_new:
+		case R.id.encounters_new:
 			createEncounter();
 			return true;
-		case R.id.menu_encounters_run:
+		case R.id.encounters_run:
 			runEncounter();
 			return true;
 		}
@@ -87,6 +87,8 @@ public class EncountersFragment extends CursorListFragment {
 	private void runEncounter(){
 		// grab the rowID
 		long rowID = getSelectedRowID();
+		
+		resetSelection();
 		
 		// transition to combat
 		Intent intent = new Intent(getActivity(), PopupFragmentActivity.class);

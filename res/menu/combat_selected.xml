@@ -2,24 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_combat_harm"
+        android:id="@+id/combat_harm"
         android:showAsAction="always"
-        android:title="@string/action_harm">
+        android:title="@string/harm">
     </item>
     <item
-        android:id="@+id/menu_combat_heal"
+        android:id="@+id/combat_heal"
         android:showAsAction="always"
-        android:title="@string/action_heal">
+        android:title="@string/heal">
     </item>
     <item
-        android:id="@+id/menu_combat_add_effect"
+        android:id="@+id/combat_add_effect"
         android:showAsAction="collapseActionView"
-        android:title="@string/action_effect">
+        android:title="@string/effect">
     </item>
     <item
-        android:id="@+id/menu_combat_remove_effect"
+        android:id="@+id/combat_remove_effect"
         android:showAsAction="collapseActionView"
-        android:title="@string/action_remove_effect">
+        android:title="@string/remove_effect">
     </item>
 
 </menu>

@@ -60,13 +60,13 @@ public class CreaturesFragment extends CursorListFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
-		case R.id.menu_creatures_new:
+		case R.id.creatures_new:
 			newCreature();
 			return true;
-		case R.id.menu_creatures_edit:
+		case R.id.creatures_edit:
 			editCreature();
 			return true;
-		case R.id.menu_creatures_remove:
+		case R.id.creatures_remove:
 			removeCreature();
 			return true;
 		}

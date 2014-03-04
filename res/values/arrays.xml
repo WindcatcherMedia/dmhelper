@@ -4,6 +4,7 @@
         <item>Encounters</item>
         <item >Players</item>
         <item >Creatures</item>
+        <item >Effects</item>
     </string-array>
     
 </resources>
